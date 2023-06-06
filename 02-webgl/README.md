@@ -17,9 +17,10 @@ Change into the directory and run `git init` and `npm init`, respectively.
 ```bash
 $ cd simple-threejs-project
 ```
-The structure of your project folder should look like the following:
-```
+The basic structure of every ThreeJS project needs at least one HTML file to define the webpage and a JavaScript file to run the three.js code. Your project folder should look like the following:
+```md
 simple-threejs-project
+├── public/
 ├── css
     └── style.css
 ├── js
@@ -28,43 +29,49 @@ simple-threejs-project
 ```
 ### Create an HTML Structure
 
-
 ```html
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Simple ThreeJS Project</title>
- <style>
-   body { margin: 0; background: lemonchiffon;}
- </style>
- <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
- <script type="importmap">
-   {
-     "imports": {
-       "three": "https://unpkg.com/three@v0.152.0/build/three.module.js",
-       "three/addons/": "https://unpkg.com/three@v0.152.0/examples/jsm/"
-     }
-   }
- </script>
-
+  <title>Basic ThreeJS Project</title>
 </head>
 <body>
   <div id="container"></div>
-  <script type="module" src="./script.js"></script>
 </body>
 </html>
 ```
+### Include Three in the App 
 
-To be able to run the Three.js code, you'll need to link the Three.js library. Just use the CDN for now. And, as you're just experimenting and learning right now, you don't really need to go through the trouble of setting up a bundler / transpiler. Set your script tag as "module" and import threejs.module.js from either a CDN or a local download:
+To be able to run the Three.js code, you'll need to link the Three.js library. Just use the CDN for now. And, as you're just experimenting and learning right now, you don't really need to go through the trouble of setting up a bundler / transpiler. In the `index.html` file, set your script tag type as "module" and place it just before the closing body tag. Then, add the following scritps in between the `<head></head>` tags:
+* Add an import map defining where to get the package
+* Because import maps are not yet supported by some major browsers, we include the polyfill es-module-shims.js
 
+```html
+  <head>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@v0.152.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@v0.152.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    ...
+    <script type="module" src="./script.js"></script>
+  </body>
+```
+In the `script.js` file, import the three.js core library:
 ```js
 import * as THREE from 'three';
 ```
 
-Build a Simple Scene
+### Build a Simple Scene
 
-Every scene needs three elements:
+Every project needs three elements:
 1. Scene
 2. Camera
 3. Renderer
