@@ -198,14 +198,240 @@ You have now returned an HTML page from the server to the user.
 
 ### Setting up an Express web server
 
+Open a Terminal window and create a new folder, then navigate to the newly created folder:
+```bash
+$ mkdir simple-express-server
+```
+Change into the directory and run git init and yarn init, respectively.
+
+```bash
+$ cd simple-express-server
+
+$ git init ** initialize empty git repository
+$ yarn init -y ** create package.json for the project
+```
+> Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. The structure of the backend directory should now look like this:
+
+```md
+simple-express-server
+├── package.json
+└── .git
+```
+
+Install the `express` package:
+```bash
+$ npm install express
+```
+Notice that a new folder called node_modules was created. Open it up and you'll see that there is an express folder. node_modules is where the dependencies in package.json are downloaded to. If you look at package.json again, you'll see express has been added as a dependency for this project.
+
+Create Express Server
+
+Now that Express is installed, create a server.js file:
+```bash
+$ touch server.js
+```
+
+Add boilerplate code found here:
+```js
+// grab the main Express module from package installed
+const express = require('express')
+// create the app variable and call the Express function
+const app = express()
+// establish which port you’d like to use
+const port = 3000
+
+// define route handler for GET requests to the server
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+The get() method has two parameters:
+The first parameter is the route. In this case, it’s the site root /.
+The second parameter is a callback function with two parameters: request and response.
+The request represents the HTTP request and the response parameter describes the HTTP response. 
+
+#### 🟩 Challenge: Load an HTML page on the root route called `index.html`. Then, add a second route called /about and load a separate HTML called `about.html`. 
+
 ## Web Sockets
 
 ### Get real-time data
+Getting real-time data with the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) vs [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
 
+Create the WebSocket connection:
+```js
+const webSocketUrl = `wss://ws.bitstamp.net`;
+const socket = new WebSocket(<url goes here>);
+```
+Detect a connection
+The open event is fired when a connection with a WebSocket is detected:
+```js
+socket.addEventListener("open", (event) => {
+  socket.send(`Socket open`);
+});
+```
+Inside the callback function, wrap the subscription message in an object and send it over the socket connection:
+```js
+socket.addEventListener("open", (event) => {
+  const data = {
+	event: "bts:subscribe",
+	data: {
+	  channel: "live_trades_btcusd"
+}
+  } 
+  socket.send(JSON.stringify(data));
+});
+```
+The `WebSocket.send()` method queues up the data to be transmitted to the server over the WebSocket connection.
+
+Listen for incoming data
+The message event is fired when data is received through a WebSocket.
+```js
+socket.addEventListener("message", (event) => {
+  console.log("Message from server ", event.data);
+});
+```
 
 ### Build a chat app
 
+Create a new project folder and navigate to this newly created folder:
+```bash
+$ mkdir chat-app && cd chat-app
+```
+Initialize an empty git repository and create a `package.json` for the application and install Express:
+```bash
+$ git init ** initialize empty git repository
+$ npm init -y ** create package.json for the project
+$ npm install express
+```
+
+Create a `server.js` file in the root folder:
+```js
+const http = require("http")
+const express = require("express")
+
+const app = express()
+const PORT = process.env.PORT || 8000;
+
+app.get("/", (req, res) => {
+    res.send("<h1>Welcome to the chat app</h1>")
+})
+
+const server = http.createServer(app)
+
+server.listen(port, () => {
+    console.log("Server working on port ${PORT}")
+})
+```
+Add a start script to the `package.json` that executes the `server.js` file:
+```js
+"scripts": {
+  "start": "node index.js"
+},
+```
+Now, in the Terminal, run `npm start` to launch the Node application. Navigate to `http://localhost:8000`
+
+
 ## Web Real-Time Communication (WebRTC)
 
+Create a new project, with a simple Express server, a static public folder and a `server.js` file:
+
+```bash
+$ mkdir simple-webrtc-webcam
+$ cd simple-webrtc-webcam
+$ mkdir public
+$ touch server.js
+```
+Change into the directory and run git init and yarn init, respectively.
+
+```bash
+$ git init ** initialize empty git repository
+$ yarn init -y ** create package.json for the project
+```
+> Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. 
+
+Install the `express` package:
+```bash
+$ npm install express
+```
+Notice that a new folder called node_modules was created. Open it up and you'll see that there is an express folder. node_modules is where the dependencies in package.json are downloaded to. If you look at package.json again, you'll see express has been added as a dependency for this project.
+
+The structure of the backend directory should now look like this:
+```md
+simple-webrtc-webcam
+├── node_modules/
+    └── express/
+├── public/
+├── package.json
+├── server.js
+└── .git
+```
+### Server Setup
+
+Write some boilerplate code for a simple server. Remember to require express, call the express function to create a server, and tell the server to start listening.
+```js
+// grab the main Express module from package installed
+const express = require('express')
+// create the app variable and call the Express function
+const app = express()
+// establish which port you’d like to use
+const PORT = 3000
+// middleware
+app.use(express.static('public'))
+// define route handler for GET requests to the server
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`)
+})
+```
+Finally, start the server:
+```bash
+$ nodemon server.js 
+```
+Inside of the `public` folder, you'll create an `index.html` and a `<video>` tag.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>Document</title>
+</head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <button id="button">Start</button>
+</body>
+</html>
+```
+In the `app.js` file, we will be using the `getUserMedia()` method. It prompts the user for permission to use a media input.
+
+```js
+const _video = document.getElementById('video')
+
+const constraints = {
+ audio: false,
+ video: true
+}
+
+const startChat = async() => {
+   const stream = await navigator.mediaDevices.getUserMedia(constraints);
+ // attach to video object
+ _video.srcObject = stream
+}
+
+```
+Add a button that triggers the webcam
+
+```js
+const btn = document.getElementById('button')
+btn.addEventListener('click', startChat);
+```
+
+### Peer to peer media streaming
 
 ## User Datagram Protocol (UDP)

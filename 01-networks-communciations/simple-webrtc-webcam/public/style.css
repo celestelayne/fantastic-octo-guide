@@ -1,3 +1,47 @@
-#video{
-  border: 2px solid black;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: white;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(183, 227, 228, 89);
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#video {
+  border: 2px solid rgba(229, 75, 75, 90);
+  width: 400px;
+  height: 400px;
+  margin: 20px;
+}
+
+#button {
+  color: white;
+  background-color: rgba(229, 75, 75, 90);
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  transition: background-color 800ms ease-in-out 300ms;
+}
+
+#button:hover {
+  background-color: green;
+  cursor: pointer;
 }
