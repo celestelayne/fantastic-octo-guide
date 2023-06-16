@@ -2,35 +2,61 @@ console.log('this file is loaded')
 
 import * as THREE from 'three';
 
-// scene
+// get a reference to the container that will hold the scene
+const container = document.querySelector('#container');
+
+// create the scene
 const scene = new THREE.Scene();
 
-// camera
+// create a camera
+const fov = 75
+const aspect = window.innerWidth / window.innerHeight
+const near = 0.1
+const far = 1000
+
 const camera = new THREE.PerspectiveCamera( 
-  75, // field of view
-  window.innerWidth / window.innerHeight, 
-  0.1, // near clipping plane
-  1000 // far clipping plane
+  fov,
+  aspect, 
+  near,
+  far
 );
 
-// select the container element from the index.html file
-const canvas = document.querySelector('#container');
-
-// renderer
+// create renderer
 const renderer = new THREE.WebGLRenderer();
-
 renderer.setClearColor("#233143");
 renderer.setSize( window.innerWidth, window.innerHeight );
 
-console.log(renderer.domElement)
+// create the ground plane
+const planeGeometry = new THREE.PlaneGeometry(60, 20);
+const planeMaterial = new THREE.MeshBasicMaterial({
+    color: 0xAAAAAA
+});
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
+// rotate and position the plane
+plane.rotation.x = -0.5 * Math.PI;
+plane.position.set(15, 0, 0);
+
+// add the plane to the scene
+scene.add(plane);
+
+// create a geometry
+const geometry = new THREE.BoxGeometry( 2, 2, 2 );
+// create a material
+const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+// create mesh with geometry and material
+const cube = new THREE.Mesh( geometry, material );
+
+    // position the cube
+    cube.position.set(-4, 3, 0);
+// pass mesh to the scene
+scene.add(cube)
+
+camera.position.set(0, 0, 10);
+camera.lookAt(scene.position);
+
+// add the automatically created <canvas> element to the page
 document.body.appendChild( renderer.domElement );
 
-// make canvas responsive
-window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-})
-
+// render, or 'create a still image', of the scene
 renderer.render(scene, camera);

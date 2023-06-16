@@ -6,7 +6,7 @@
 
 An HTTP server can be useful for testing web applications locally during development and for sharing files across multiple devices connected on the same network, like a mobile phone or tablet.
 
-First, check to see if you have python installed on your computer and if so, which version. Open your command prompt (Windows) or terminal (macOS/Linux). To check if Python is installed, enter one of the following commands:
+First, check to see if you have python installed on your computer and if so, which version. Open your Command Prompt (Windows) or Terminal (macOS/Linux). To check if Python is installed, enter one of the following commands:
 ```bash
 $ python --version
 # If the above fails, try:
@@ -123,7 +123,9 @@ Now, open the web browser with the URL and you should see:
 
 ![add image here]()
 
-#### 🟩 Challenge: Return different Kinds of Content [JSON, CSV, HTML]
+#### 🔮 Find [starter code here](./simple-http-server/)
+
+#### 🏆 Challenge: Return different Kinds of Content [JSON, CSV, HTML]
 
 Technically we can just drop some HTML in the `res.end()` method which writes the HTTP response back to the client that requested it (in this case its the web browser). This function will return any data the server has to return. In this case, its text data (with an HTML format).
 
@@ -160,7 +162,7 @@ To serve HTML files, we load the HTML file with the fs module and use its data w
 </html>
 ```
 
-Next, import the fs module:
+Next, import the `fs` module:
 ```js
 const http = require("http");
 const fs = require('fs').promises;
@@ -224,7 +226,7 @@ $ npm install express
 ```
 Notice that a new folder called node_modules was created. Open it up and you'll see that there is an express folder. node_modules is where the dependencies in package.json are downloaded to. If you look at package.json again, you'll see express has been added as a dependency for this project.
 
-Create Express Server
+### Create Express Server
 
 Now that Express is installed, create a server.js file:
 ```bash
@@ -254,7 +256,9 @@ The first parameter is the route. In this case, it’s the site root /.
 The second parameter is a callback function with two parameters: request and response.
 The request represents the HTTP request and the response parameter describes the HTTP response. 
 
-#### 🟩 Challenge: Load an HTML page on the root route called `index.html`. Then, add a second route called /about and load a separate HTML called `about.html`. 
+#### 🏆 Challenge: Load an HTML page on the root route called `index.html`. Then, add a second route called /about and load a separate HTML called `about.html`. 
+
+#### 🔮 Find [starter code here](./simple-express-server/)
 
 ## Web Sockets
 
@@ -301,11 +305,14 @@ Create a new project folder and navigate to this newly created folder:
 ```bash
 $ mkdir chat-app && cd chat-app
 ```
-Initialize an empty git repository and create a `package.json` for the application and install Express:
-```bash
-$ git init ** initialize empty git repository
-$ npm init -y ** create package.json for the project
+Create a `package.json` for the application and install Express:
+```js
+// create package.json for the project
+$ npm init -y
+// install the express module
 $ npm install express
+
+$ touch server.js
 ```
 
 Create a `server.js` file in the root folder:
@@ -322,20 +329,36 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app)
 
-server.listen(port, () => {
+server.listen(PORT, () => {
     console.log("Server working on port ${PORT}")
 })
 ```
 Add a start script to the `package.json` that executes the `server.js` file:
 ```js
 "scripts": {
-  "start": "node index.js"
+  "start": "node server.js"
 },
 ```
 Now, in the Terminal, run `npm start` to launch the Node application. Navigate to `http://localhost:8000`
 
+#### Serving HTML
+Currently, we are just passing in a string of HTML to the `res.send()` method. Let’s send an HTML file.
+
+Create an `index.html` file that includes a form and an element to append the text to the webpage. 
+
+#### Listening for websocket connections
+
+#### Create a socket.io connection on the client
+
+### Name the chat participants
+
+### Build a shared cursor app [collaborative editing]
+
+#### 🏆 Challenge: Build a collaborative sketching application
 
 ## Web Real-Time Communication (WebRTC)
+
+WebRTC is different from WebSockets in that once a connection is established, data can (under some circumstances) be transmitted directly between browsers and devices in real time without touching the server.
 
 Create a new project, with a simple Express server, a static public folder and a `server.js` file:
 
@@ -423,7 +446,6 @@ const startChat = async() => {
  // attach to video object
  _video.srcObject = stream
 }
-
 ```
 Add a button that triggers the webcam
 

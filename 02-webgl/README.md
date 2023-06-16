@@ -72,23 +72,69 @@ import * as THREE from 'three';
 ### Build a Simple Scene
 
 Every project needs three elements:
-1. Scene
-2. Camera
-3. Renderer
+1. Scene – where we place all of our rendered objects, lights and cameras
+2. Camera – allows us to see objects in the scene
+3. Renderer – renders our scene with the WebGL API
 
 ```js
-// scene
-const scene = new THREE.Scene();
-// camera
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-// select the canvas element from the index.html file
+// get a reference to the container that will hold the scene
 const canvas = document.querySelector('#container');
-// renderer
-const renderer = new THREE.WebGLRenderer();
 
+// create the scene
+const scene = new THREE.Scene();
+// create a camera
+const fov = 75
+const aspect = window.innerWidth / window.innerHeight
+const near = 0.1
+const far = 1000
+
+const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+
+// create renderer
+const renderer = new THREE.WebGLRenderer();
 renderer.setClearColor("#233143");
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
 
+// add the automatically created <canvas> element to the page
+document.body.appendChild( renderer.domElement );
+// rendeer the scene
 renderer.render(scene, camera);
 ```
+![field of view image here]()
+
+The [`PerspectiveCamera()`](https://threejs.org/docs/#api/en/cameras/PerspectiveCamera) method takes four parameters:
+1. Field of View (FOV): a number (in degrees) that represents the amount (width) of the observable virtual world that you can see at one point 
+2. Aspect Ratio: ratio between the width and height of the scene (width divided by height). Here we are using the `.innerWidth` and `.innerHeight` properties of the window object
+3. Near Clipping Pane: the boundary plane closest to the camera, anything closer to the camera will not be rendered
+4. Far Clipping Pane: the boundary plane farthest from the camera, anything beyond this pane will not be rendered
+
+### Create Visible Objects
+
+[Meshes]() are the most common kind of visible object used in 3D computer graphics, and are used to display all kinds of 3D objects. Meshes take two parameters: a geometry and a material.
+
+The geometry defines the shape of the mesh while the material defines how the surface of the mesh looks. If we create a box-shaped geometry then the mesh will be shaped like a box.
+
+```js
+// create a geometry
+const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+// create a material
+const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+// create mesh and pass in geometry and material
+const cube = new THREE.Mesh( geometry, material );
+// add the object to the scene
+scene.add( cube );
+```
+Here, we’ve created a cube using `BoxGeometry()` which takes three parameters: width, height, and depth. Materials define the surface of the object – what it looks like its made from. Here, we will create a `MeshBasicMaterial()`, A material for drawing geometries in a simple shaded (flat or wireframe) way.
+
+Now, we can create the mesh passing in both parameters.
+
+Finally, we pass the mesh to the scene. Don’t see anything? That is because Every object we create is initially positioned at the center of our scene, the point (0,0,0). This means our camera is currently positioned at (0,0,0), and any objects we add to the scene will also be positioned at (0,0,0), all jumbled together on top of each other. So, let’s move it towards the viewer:
+
+```js
+camera.position.set(0, 0, 10);
+```
+#### 🟩 Challenge: 
+
+### Lighting
+
+### Animation

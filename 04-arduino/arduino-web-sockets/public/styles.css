@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: white;
+  width: 100%;
+}
+
+.container {
+  font-family: 'Geologica', sans-serif;
+  /* background: rgba(183, 227, 228, 89); */
+  /* background: #fcbf11; */
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+}
+
+.row {
+    /* justify-content: center; */
+    /* align-items: center; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+/*   flex:1 is equivalent to flex: 1 1 0 */
+/*   grow shrink basis */
+  flex: 1;
+}
+
+
+.blue-column {
+  display: flex;
+  /* background-color: blue; */
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.green-column {
+  display: flex;
+  height: 90vh;
+  /* background-color: green; */
+  justify-content: center;
+  align-items: center;
+}
+
+.yellow-column {
+  display: flex;
+  height: 90vh;
+  /* background-color: yellow; */
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  width: 150px;
+}
+
+.power {
+  height: 10vh;
+  font-size: 2em;
+  background: green;
+  text-align: center;
+  line-height: 10vh;
+}
