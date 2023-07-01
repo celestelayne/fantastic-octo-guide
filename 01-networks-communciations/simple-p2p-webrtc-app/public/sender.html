@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sender Client</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h2>CDP Webcam | Sender</h2>
+    <video id="video" autoplay playsinline></video>
+    <div id="button">Start</div>
+
+    <label for="peerSelect">Peer: </label><select id="peerSelect"></select>
+  </div>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="sender.js"></script>
+</body>
+</html>

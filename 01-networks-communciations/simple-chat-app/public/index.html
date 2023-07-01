@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <main class="chat-container"></main>
-    <form action="">
+  <div class="chat-container">
+    <!-- messages get appended here -->
+    <ul class="messages-container"></ul>
+    <!-- type in chat here -->
+    <form class="chat-form">
       <input type="text" class="chat-input" placeholder="Type your chat message here">
+      <button type="submit">Send</button>
     </form>
   </div>  
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>

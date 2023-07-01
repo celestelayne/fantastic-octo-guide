@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chat Application</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- name form -->
+    <header>
+      <form class="name-form">
+        <input type="text" class="name-input" placeholder="Type your name">
+        <button>Connect</button>
+      </form>
+    </header>
+    <!-- append chat messges here  -->
+    <section class="chat-container"></section>
+    <!-- chat form -->
+    <footer>
+      <form class="chat-form">
+        <input type="text" class="chat-input" placeholder="Type your chat message">
+        <button>Send</button>
+      </form>
+    </footer>
+  </div>  
+
+    <!-- socket.io library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <!-- custom javascript file -->
+    <script src="main.js"></script>
+  
+</body>
+</html>

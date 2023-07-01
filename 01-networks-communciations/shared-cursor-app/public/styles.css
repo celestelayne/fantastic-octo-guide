@@ -1,0 +1,10 @@
+.cursor {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  /* margin-left: -1rem; */
+  /* margin-right: -1rem; */
+  background: #79C234;
+  border-radius: 50% 50%;
+  transition: top .1s, left .1s;
+}
