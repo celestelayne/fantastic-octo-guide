@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
+  <script src="./assets/components/game-manager.js"></script>
+</head>
+<body>
+  <a-scene>
+
+    <a-sky color="#A6CFE2"></a-sky>
+
+    <a-assets>
+      <a-asset-item id="abby-avocado" src="./assets/models/abby_the_cute_avocado.gltf"></a-asset-item>
+    </a-assets>
+
+    <a-entity hello-world></a-entity>
+  
+    <a-entity 
+      gltf-model="#abby-avocado" 
+      position="0.05 1 -1" 
+      scale="2 2 2" 
+      animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+    </a-entity>
+
+    <a-box 
+      color="#0AB300"
+      position="0.05 1 -5"
+      animation="property: position; to: 0.25 1.5 0.5; dur: 5000; easing: linear">
+    </a-box>
+
+    <a-plane
+      rotation="-90 0 0"
+      color="#52430e"
+      height="20"
+      width="100">
+    </a-plane>
+
+  </a-scene>
+  <script src="main.js"></script>
+</body>
+</html>
