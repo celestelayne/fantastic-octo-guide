@@ -396,6 +396,35 @@ Add an `app.get()` method for the path `/fruits`. Inside the new route, use `res
 
 </details>
 
+
+### Serving Static Files
+
+In order to serve up static files such as images, stylesheets and client side javascript, Express provides a middleware function called, express.static. Static files are those that a client downloads from a server. 
+
+A common practice in the development of a web application is to store all static files under the ‘public’ directory in the root of a project. We can serve this folder to serve static files by adding this snippet of code to our server.js file:
+```
+app.use(express.static('public'));
+```
+Make a directory in your project called public. Then, create three new directories, public/scripts, public/styles and public/images subdirectories.
+```
+simple-express-server
+├── public/
+    ├── app.js
+    ├── styles.css
+    └── images/
+├── server.js
+├── package.json
+└── .git
+```
+Open the app.js file and add a console.log("Sanity Check: JS is working!") to the app.js so that it appears in your browser dev tools console. In the styles.css file add the following:
+```
+body {
+  background: yellow;
+}
+```
+The webpage should now be yellow.
+
+
 ***
 
 ## Web Sockets
@@ -436,170 +465,3 @@ socket.addEventListener("message", (event) => {
   console.log("Message from server ", event.data);
 });
 ```
-
-### Build a chat app
-
-Create a new project folder and navigate to this newly created folder:
-```bash
-$ mkdir chat-app && cd chat-app
-```
-Create a `package.json` for the application and install Express:
-```js
-// create package.json for the project
-$ npm init -y
-// install the express module
-$ npm install express
-
-$ touch server.js
-```
-
-Create a `server.js` file in the root folder:
-```js
-const http = require("http")
-const express = require("express")
-
-const app = express()
-const PORT = process.env.PORT || 8000;
-
-app.get("/", (req, res) => {
-    res.send("<h1>Welcome to the chat app</h1>")
-})
-
-const server = http.createServer(app)
-
-server.listen(PORT, () => {
-    console.log("Server working on port ${PORT}")
-})
-```
-Add a start script to the `package.json` that executes the `server.js` file:
-```js
-"scripts": {
-  "start": "node server.js"
-},
-```
-Now, in the Terminal, run `npm start` to launch the Node application. Navigate to `http://localhost:8000`
-
-#### Serving HTML
-Currently, we are just passing in a string of HTML to the `res.send()` method. Let’s send an HTML file.
-
-Create an `index.html` file that includes a form and an element to append the text to the webpage. 
-
-#### Listening for websocket connections
-
-#### Create a socket.io connection on the client
-
-### Name the chat participants
-
-### Build a shared cursor app [collaborative editing]
-
-#### 🏆 Challenge: Build a collaborative sketching application
-
-## Web Real-Time Communication (WebRTC)
-
-WebRTC is different from WebSockets in that once a connection is established, data can (under some circumstances) be transmitted directly between browsers and devices in real time without touching the server.
-
-### Simple Video Media Stream
-
-Learning Objective: 
-
-### What are we building?
-
-Our first WebRTC-enabled project will show a single `<video>` element on the webpage, when the user clicks the start button the browser will ask the user for permission to use the camera, and then show a live feed of the user in the browser.
-
-<screenshot>
-
-Create a new project, with a simple Express server, a static public folder and a `server.js` file:
-
-```bash
-$ mkdir simple-webrtc-webcam
-$ cd simple-webrtc-webcam
-$ mkdir public
-$ touch server.js
-```
-Change into the directory and run git init and yarn init, respectively.
-
-```bash
-$ git init # initialize empty git repository
-$ yarn init -y # create package.json for the project
-```
-> Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. 
-
-Install the `express` package:
-```bash
-$ npm install express
-```
-Notice that a new folder called node_modules was created. Open it up and you'll see that there is an express folder. node_modules is where the dependencies in package.json are downloaded to. If you look at package.json again, you'll see express has been added as a dependency for this project.
-
-The structure of the backend directory should now look like this:
-```md
-simple-webrtc-webcam
-├── node_modules/
-    └── express/
-├── public/
-├── package.json
-├── server.js
-└── .git
-```
-### Server Setup
-
-Write some boilerplate code for a simple server. Remember to require express, call the express function to create a server, and tell the server to start listening.
-```js
-// grab the main Express module from package installed
-const express = require('express')
-// create the app variable and call the Express function
-const app = express()
-// establish which port you’d like to use
-const PORT = 3000
-// middleware
-app.use(express.static('public'))
-// define route handler for GET requests to the server
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
-})
-```
-Finally, start the server:
-```bash
-$ nodemon server.js 
-```
-Inside of the `public` folder, you'll create an `index.html` and a `<video>` tag.
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <title>Document</title>
-</head>
-<body>
-  <video id="video" autoplay playsinline></video>
-  <button id="button">Start</button>
-</body>
-</html>
-```
-In the `app.js` file, we will be using the `getUserMedia()` method. It prompts the user for permission to use a media input.
-
-```js
-const _video = document.getElementById('video')
-
-const constraints = {
- audio: false,
- video: true
-}
-
-const startChat = async() => {
-   const stream = await navigator.mediaDevices.getUserMedia(constraints);
- // attach to video object
- _video.srcObject = stream
-}
-```
-Add a button that triggers the webcam
-
-```js
-const btn = document.getElementById('button')
-btn.addEventListener('click', startChat);
-```
-
-### Peer to peer media streaming
