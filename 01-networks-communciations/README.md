@@ -399,14 +399,14 @@ Add an `app.get()` method for the path `/fruits`. Inside the new route, use `res
 
 ### Serving Static Files
 
-In order to serve up static files such as images, stylesheets and client side javascript, Express provides a middleware function called, express.static. Static files are those that a client downloads from a server. 
+In order to serve up static files such as images, stylesheets and client side javascript, Express provides a middleware function called, `express.static`. Static files are those that a client downloads from a server. 
 
-A common practice in the development of a web application is to store all static files under the ‘public’ directory in the root of a project. We can serve this folder to serve static files by adding this snippet of code to our server.js file:
+A common practice in the development of a web application is to store all static files under the `public` directory in the root of a project. We can serve this folder to serve static files by adding this snippet of code to our `server.js` file:
 ```
 app.use(express.static('public'));
 ```
-Make a directory in your project called public. Then, create three new directories, public/scripts, public/styles and public/images subdirectories.
-```
+Make a directory in your project called `public`. Then, create three new directories, `public/scripts`, `public/styles` and `public/images` subdirectories.
+```md
 simple-express-server
 ├── public/
     ├── app.js
@@ -416,8 +416,8 @@ simple-express-server
 ├── package.json
 └── .git
 ```
-Open the app.js file and add a console.log("Sanity Check: JS is working!") to the app.js so that it appears in your browser dev tools console. In the styles.css file add the following:
-```
+Open the `app.js` file and add a `console.log("Sanity Check: JS is working!")` to the app.js so that it appears in your browser dev tools console. In the `styles.css` file add the following:
+```css
 body {
   background: yellow;
 }
