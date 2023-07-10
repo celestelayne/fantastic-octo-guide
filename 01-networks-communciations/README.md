@@ -79,7 +79,13 @@ Note that if there is any index.html file then it will be served to the browser,
 
 To stop the server, type control-C.
 
-#### 🏆 Challenge: Draw a diagram of the request response cycle with the server and a client of your choosing included and labeled.
+<details>
+
+  <summary>🏆 Challenge:</summary>
+
+  <h3>Draw a diagram of the request response cycle with the server and a client of your choosing included and labeled.</h3>
+
+</details>
 
 ***
 
