@@ -1,0 +1,20 @@
+{
+  "name": "geojson-threejs-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "styart": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "three": "^0.154.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

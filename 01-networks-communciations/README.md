@@ -2,11 +2,24 @@
 
 ## Servers
 
+### What is a server?
+
+When you visit websites on the internet, they are each hosted by a "server". A server is a computer located somewhere in the world that's connected to the internet, and that computer's job is to "serve" webpages to internet users that want to view them.
+
+### What does it mean to program a server?
+
+We need to write the code that handles website requests and figures out how to respond (by serving the webpages). It might need to format data into JSON, it might need to talk to a database to request a specific resource, and it might need to check if a user is authorized to see the resource they have requested.
+
+To write server side code, is to lay out all of the possible requests that might come in and give instructions for how to handle each type of request.
+
 ### Setting Up a Local HTTP Server
+
+**Learning Objective:** Spinning up a test server in the Terminal
 
 An HTTP server can be useful for testing web applications locally during development and for sharing files across multiple devices connected on the same network, like a mobile phone or tablet.
 
 First, check to see if you have python installed on your computer and if so, which version. Open your Command Prompt (Windows) or Terminal (macOS/Linux). To check if Python is installed, enter one of the following commands:
+
 ```bash
 $ python --version
 # If the above fails, try:
@@ -16,7 +29,7 @@ The command above should return a version number, such as:
 ```bash
 $ Python 2.7.16
 ``` 
-If you do not have Python installed on your system, you will need to download it here. After installing, close your current Command Prompt Window and open a new one. 
+If you do not have Python installed on your system, you will need to [download it here](https://www.python.org/downloads/). After installing, close your current Command Prompt Window and open a new one. 
 
 Navigate into your project directory:
 ```bash
@@ -66,6 +79,10 @@ Note that if there is any index.html file then it will be served to the browser,
 
 To stop the server, type control-C.
 
+#### 🏆 Challenge: Draw a diagram of the request response cycle with the server and a client of your choosing included and labeled.
+
+***
+
 ### Setting up an HTTP web server
 Open a Terminal window and create a new folder, then navigate to the newly created folder:
 ```bash
@@ -82,8 +99,9 @@ $ touch server.js
 Open the file in your text editor.
 
 Load the http module, it has a function to create a server.
+```
 const http = require("http");
-
+```
 Define two constants
 ```js
 const host = 'localhost';
@@ -100,8 +118,8 @@ Next, we create a function to handle an incoming HTTP request and return an HTTP
 
 ```js
 const requestListener = function (req, res) {
-    res.writeHead(200); # sets the HTTP status code of the response
-    res.end("My first server!"); # writes the HTTP response back to the client who requested it
+    res.writeHead(200); // sets the HTTP status code of the response
+    res.end("My first server!"); // writes the HTTP response back to the client who requested it
 };
 ```
 Finally, we create our server:
@@ -121,17 +139,34 @@ Server is running on http://localhost:8000
 ```
 Now, open the web browser with the URL and you should see:
 
-![add image here]()
+![add image here]('../../../assets/01_images/simple_http_server_03.png)
 
-#### 🔮 Find [starter code here](./simple-http-server/)
+<details>
+ <summary>🏆 Challenge:</summary>
 
-#### 🏆 Challenge: Return different Kinds of Content [JSON, CSV, HTML]
+  <h3>You are able to return different Kinds of Content – JSON, CSV, HTML. For this challenge, let's return some JSON (JavaScript Object Notation) to the webpage.</h3>
+
+  <code>
+
+    const data = [{
+      "name": "celeste",
+      "city": "new york"
+    }]
+
+    res.end(JSON.stringify(data))
+  </code>
+
+  <p>You should see the following:</p>
+  <img src="../assets/01_images/simple_http_server_02.png">
+</details>
+
 
 Technically we can just drop some HTML in the `res.end()` method which writes the HTTP response back to the client that requested it (in this case its the web browser). This function will return any data the server has to return. In this case, its text data (with an HTML format).
 
 The response we return from a web server can take a variety of media types – text, images, application, audio, video and multipart. This example will focus on returning text-based formats and in order to do that we need to:
-Set the Content-Type header in our HTTP responses with the appropriate value.
-Ensure that `res.end()` gets the data in the right format. 
+
+* Set the Content-Type header in our HTTP responses with the appropriate value.
+* Ensure that `res.end()` gets the data in the right format. 
 
 Let’s start by modifying the `requestListener()` function to return the appropriate Content-Type header. Remember, `setHeader()` takes two arguments, name and value:
 ```js
@@ -194,9 +229,11 @@ In case the `fs.readFile()` method fails, we use the `catch()` method to handle 
 ```
 Open the web browser to http://localhost:8000. 
 
-![add image here]()
+![add image here]('../../../assets/01_images/simple_http_server_01.png)
 
 You have now returned an HTML page from the server to the user. 
+
+***
 
 ### Setting up an Express web server
 
@@ -256,9 +293,22 @@ The first parameter is the route. In this case, it’s the site root /.
 The second parameter is a callback function with two parameters: request and response.
 The request represents the HTTP request and the response parameter describes the HTTP response. 
 
-#### 🏆 Challenge: Load an HTML page on the root route called `index.html`. Then, add a second route called /about and load a separate HTML called `about.html`. 
+<details>
 
-#### 🔮 Find [starter code here](./simple-express-server/)
+  <summary>🏆 Challenge:</summary>
+
+  <h3> Load an HTML page on the root route called `index.html`. Then, add a second route called `/about` and load a separate HTML called `about.html`.</h3>
+
+  <code>
+  
+    app.get('/about', (req, res) => {
+      res.send('My name is Celeste')
+    })
+  </code>
+
+</details>
+
+***
 
 ## Web Sockets
 
@@ -360,6 +410,16 @@ Create an `index.html` file that includes a form and an element to append the te
 
 WebRTC is different from WebSockets in that once a connection is established, data can (under some circumstances) be transmitted directly between browsers and devices in real time without touching the server.
 
+### Simple Video Media Stream
+
+Learning Objective: 
+
+### What are we building?
+
+Our first WebRTC-enabled project will show a single `<video>` element on the webpage, when the user clicks the start button the browser will ask the user for permission to use the camera, and then show a live feed of the user in the browser.
+
+<screenshot>
+
 Create a new project, with a simple Express server, a static public folder and a `server.js` file:
 
 ```bash
@@ -371,8 +431,8 @@ $ touch server.js
 Change into the directory and run git init and yarn init, respectively.
 
 ```bash
-$ git init ** initialize empty git repository
-$ yarn init -y ** create package.json for the project
+$ git init # initialize empty git repository
+$ yarn init -y # create package.json for the project
 ```
 > Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. 
 
@@ -455,5 +515,3 @@ btn.addEventListener('click', startChat);
 ```
 
 ### Peer to peer media streaming
-
-## User Datagram Protocol (UDP)
