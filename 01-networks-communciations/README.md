@@ -237,17 +237,24 @@ You have now returned an HTML page from the server to the user.
 
 ### Setting up an Express web server
 
+Learning Objective: Spinning up a web server using the Express JavaScript framework
+
+#### Directory and File Setup
+
 Open a Terminal window and create a new folder, then navigate to the newly created folder:
 ```bash
 $ mkdir simple-express-server
 ```
-Change into the directory and run git init and yarn init, respectively.
+Change into the directory and run npm init. npm – or "Node Package Manager" – is the default package manager for JavaScript's runtime Node.js. NPM consists of two main parts:
+* The Command Line Interface, and
+* The online repository of libraries (JavaScript packages)
+
+For more detailed information about npm, [read this article](https://www.freecodecamp.org/news/what-is-npm-a-node-package-manager-tutorial-for-beginners/).
 
 ```bash
 $ cd simple-express-server
 
-$ git init ** initialize empty git repository
-$ yarn init -y ** create package.json for the project
+$ npm init -y # create package.json for the project
 ```
 > Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. The structure of the backend directory should now look like this:
 
@@ -261,16 +268,23 @@ Install the `express` package:
 ```bash
 $ npm install express
 ```
-Notice that a new folder called node_modules was created. Open it up and you'll see that there is an express folder. node_modules is where the dependencies in package.json are downloaded to. If you look at package.json again, you'll see express has been added as a dependency for this project.
+Node Package Manager (npm) keeps track of the various libraries and third-party packages of code used in a Node project. `npm install express` tells the Node Package Manager (npm) to download and install the Express library for this project to use. The above two npm commands will be necessary for every new web application that uses Express. 
 
-### Create Express Server
+Notice that a new folder called `node_modules` was created. Open it up and you'll see that there is an express folder. `node_modules` is where the dependencies in `package.json` are downloaded to. If you look at `package.json` again, you'll see express has been added as a dependency for this project.
+
+Open the project directory in VS Code:
+```
+$ code .
+``` 
+
+### Server Setup
 
 Now that Express is installed, create a server.js file:
 ```bash
 $ touch server.js
 ```
 
-Add boilerplate code found here:
+Add boilerplate code found [here](https://expressjs.com/en/starter/hello-world.html):
 ```js
 // grab the main Express module from package installed
 const express = require('express')
@@ -288,19 +302,87 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 ```
-The get() method has two parameters:
-The first parameter is the route. In this case, it’s the site root /.
-The second parameter is a callback function with two parameters: request and response.
-The request represents the HTTP request and the response parameter describes the HTTP response. 
+In the Terminal, run `node server.js`:
+```
+$ node server.js
+``` 
+You should see: Example app listening on 3000. When using Express, our server-side console logs show up in the Terminal window. Now visit http://localhost:3000/ in your browser window and you should see "Hello World!".
+
+> Note:  Every time you make a change in your server code and want it to run, you need to end the previous server and run node server.js.
+
+Let’s test this by placing a console.log() with the req and res parameters inside the app.get() method for the `/` path. (The / path is often called the "root" path.) Restart the server and briefly check out what the req and res parameters return to the Terminal.
+
+```js
+app.get('/', (req, res) => {
+  console.log(req, res)
+  res.send('Hello World!')
+})
+```
+#### Routes
+
+Once the web server is listening, it can respond to requests. Routes are how a server side application responds to the client request of a particular HTTP endpoint. An HTTP endpoint is a URL in the web application, examples include:
+
+```bash
+https://localhost:8000/fruits
+```
+Let's look at the anatomy of the above URL:
+* https is the protocol
+* localhost is the hostname 
+* 8000 is the port
+* `/fruits` is the path
+
+Express uses the `app.get()` method to register routes to match GET requests. `app.get()` takes two parameters:
+* The first parameter is the route (or path). In this case, it’s the site root /.
+* The second parameter is a callback function to handle the request and send a response
+  * The callback function takes two parameters: request and response.
+
+Let’s build two more routes into our application:
+
+| Request Type  | Request Path  | Response  |
+| ------------- |:------------- | :-----    |
+| GET           | /             | Hello World     |
+| GET           | /fruits       | apples, bananas, oranges     |
+| GET           | /animals      | cats, birds, zebra     |
+
+When the server receives a GET request at `/`, we will use a route to define the appropriate functionality and path. The path is the part after the hostname and port number. GET requests are used for retrieving resources from a server.
+
+In the server lets set up a couple dummy datasets (sometimes called seed data) and serve them when you hit the url, `/fruits` and `/animals` in the web browser. To have this seed data be accessible, we need to set up a route to serve it.
+
+
+```js
+// dummy dataset
+const fruits = ['apples', 'bananas', 'oranges']
+const animals = ['cats', 'birds', 'zebra']
+
+// routes
+app.get('/, (req, res) => {
+  res.send('Hello World!')
+  res.send("<h1>Welcome to the chat app</h1>")
+})
+
+app.get('/fruits, (req, res) => {
+  // send all the fruit
+  res.json(fruits)
+})
+
+app.get('/animals, (req, res) => {
+  // send all the animals
+  res.json(animals)
+})
+```
+Add an `app.get()` method for the path `/fruits`. Inside the new route, use `res.json(fruits)` to respond with some JSON containing all the fruit from our fruits variable. Do the same for the `/animals` route.
+
+> Restart the server and you should see the fruit when hit http://localhost:3000/fruits
+
 
 <details>
 
   <summary>🏆 Challenge:</summary>
 
-  <h3> Load an HTML page on the root route called `index.html`. Then, add a second route called `/about` and load a separate HTML called `about.html`.</h3>
+  <h3> Load an HTML page on the root route called `index.html`. Then, add a second route called `/about` and load a separate HTML called `about.html`. The `about.html` page should include a short bio about yourself.</h3>
 
   <code>
-  
+
     app.get('/about', (req, res) => {
       res.send('My name is Celeste')
     })
