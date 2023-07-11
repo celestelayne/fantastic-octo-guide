@@ -81,7 +81,7 @@ To stop the server, type control-C.
 
 <details>
 
-  <summary>🏆 Challenge:</summary>
+  <summary>🧩 Challenge:</summary>
 
   <h3>Draw a diagram of the request response cycle with the server and a client of your choosing included and labeled.</h3>
 
@@ -98,7 +98,7 @@ Change into the directory:
 ```
 $ cd simple-http-server
 ```
-Create a server.js file:
+Create a `server.js` file:
 ```
 $ touch server.js
 ```
@@ -114,7 +114,7 @@ const host = 'localhost';
 const port = 8000;
 ```
 
-The value localhost is a special private address that computers use to refer to themselves. It’s typically the equivalent of the internal IP address 127.0.0.1 and it’s only available to the local computer.
+The value localhost is a special private address that computers use to refer to themselves. It’s typically the equivalent of the internal IP address `127.0.0.1` and it’s only available to the local computer.
 
 The port is a number that servers use as an endpoint or “door” to our IP address. In our example, we will use port 8000 for our web server. 
 
@@ -148,7 +148,7 @@ Now, open the web browser with the URL and you should see:
 ![add image here]('../../../assets/01_images/simple_http_server_03.png)
 
 <details>
- <summary>🏆 Challenge:</summary>
+ <summary>🧩 Challenge:</summary>
 
   <h3>You are able to return different Kinds of Content – JSON, CSV, HTML. For this challenge, let's return some JSON (JavaScript Object Notation) to the webpage.</h3>
 
@@ -383,7 +383,7 @@ Add an `app.get()` method for the path `/fruits`. Inside the new route, use `res
 
 <details>
 
-  <summary>🏆 Challenge:</summary>
+  <summary>🧩 Challenge:</summary>
 
   <h3> Load an HTML page on the root route called `index.html`. Then, add a second route called `/about` and load a separate HTML called `about.html`. The `about.html` page should include a short bio about yourself.</h3>
 
@@ -423,6 +423,5 @@ body {
 }
 ```
 The webpage should now be yellow.
-
 
 ***
