@@ -12,9 +12,9 @@ We need to write the code that handles website requests and figures out how to r
 
 To write server side code, is to lay out all of the possible requests that might come in and give instructions for how to handle each type of request.
 
-### Setting Up a Local HTTP Server
+### 🚧 Setting Up a Local HTTP Server
 
-**Learning Objective:** Spinning up a test server in the Terminal
+**Learning Objective:** Spinning up a local server in the Terminal
 
 An HTTP server can be useful for testing web applications locally during development and for sharing files across multiple devices connected on the same network, like a mobile phone or tablet.
 
@@ -77,35 +77,28 @@ http://192.168.1.153:8080/
 ```
 Note that if there is any index.html file then it will be served to the browser, otherwise directory listing will be shown as in above image.
 
-To stop the server, type control-C.
-
-<details>
-
-  <summary>🧩 Challenge:</summary>
-
-  <h3>Draw a diagram of the request response cycle with the server and a client of your choosing included and labeled.</h3>
-
-</details>
+To stop the server, type `Control + C`.
 
 ***
 
-### Setting up an HTTP web server
+### 🚧 Setting up an HTTP web server
+
 Open a Terminal window and create a new folder, then navigate to the newly created folder:
 ```bash
 $ mkdir simple-http-server
 ```
 Change into the directory:
-```
+```bash
 $ cd simple-http-server
 ```
 Create a `server.js` file:
-```
+```bash
 $ touch server.js
 ```
 Open the file in your text editor.
 
 Load the http module, it has a function to create a server.
-```
+```js
 const http = require("http");
 ```
 Define two constants
@@ -145,7 +138,7 @@ Server is running on http://localhost:8000
 ```
 Now, open the web browser with the URL and you should see:
 
-![add image here]('../../../assets/01_images/simple_http_server_03.png)
+![http web server]('../../../assets/01_images/simple_http_server_03.png)
 
 <details>
  <summary>🧩 Challenge:</summary>
@@ -165,7 +158,6 @@ Now, open the web browser with the URL and you should see:
   <p>You should see the following:</p>
   <img src="../assets/01_images/simple_http_server_02.png">
 </details>
-
 
 Technically we can just drop some HTML in the `res.end()` method which writes the HTTP response back to the client that requested it (in this case its the web browser). This function will return any data the server has to return. In this case, its text data (with an HTML format).
 
@@ -187,7 +179,7 @@ To serve HTML files, we load the HTML file with the fs module and use its data w
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <title>Document</title>
+ <title>HTTP Server</title>
  <style>
    body {
      background: lemonchiffon;
@@ -239,9 +231,11 @@ Open the web browser to http://localhost:8000.
 
 You have now returned an HTML page from the server to the user. 
 
+### 💡 Solution: [simple-http-server](./simple-http-server/)
+
 ***
 
-### Setting up an Express web server
+### 🚧 Setting up an Express web server
 
 Learning Objective: Spinning up a web server using the Express JavaScript framework
 
@@ -274,6 +268,7 @@ Install the `express` package:
 ```bash
 $ npm install express
 ```
+
 Node Package Manager (npm) keeps track of the various libraries and third-party packages of code used in a Node project. `npm install express` tells the Node Package Manager (npm) to download and install the Express library for this project to use. The above two npm commands will be necessary for every new web application that uses Express. 
 
 Notice that a new folder called `node_modules` was created. Open it up and you'll see that there is an express folder. `node_modules` is where the dependencies in `package.json` are downloaded to. If you look at `package.json` again, you'll see express has been added as a dependency for this project.
@@ -424,4 +419,608 @@ body {
 ```
 The webpage should now be yellow.
 
+### 💡 Solution: [simple-express-server]()
+
 ***
+
+# Web Sockets
+
+WebSocket is a communications protocol used to send and receive data on the internet. It maintains a persistent two-way connection between the browser and the server.
+
+### 🚧 Build a chat application
+
+[Socket.IO](https://socket.io/docs/v4/) is a JavaScript library that allows the server to push information to the client in real time, when events occur on the server. It's built on top of the [Websockets API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API). We'll be using the socket.io library on both our client and NodeJS server. 
+
+Some use cases for Websockets and socket.io include chat applications, notifications, online games, data visualization boards, live maps, collaboration applications or social media feeds in which a user's page receives messages or posts from other users without needing the user to refresh the page.
+
+### What are we building?
+
+![Chat Application Mockup](../assets/01_images/chat_app_mockup_01.png)
+
+#### Directory and File Setup
+
+```md
+simple-chap-app
+├── node_modules/
+   └── express/
+├── public/
+    ├── app.js
+    ├── styles.css
+    └── images/
+├── server.js
+├── package.json
+└── .git
+```
+
+### Server Setup
+
+Create a new project folder and navigate to this newly created folder:
+```bash
+$ mkdir simple-chap-app && cd simple-chap-app
+```
+Create a package.json for the application and install Express:
+```bash
+$ npm init -y # create package.json for the project
+$ npm install express
+```
+Remember, the server is responsible for serving the HTML, CSS and JS files, starting the Socket.io connection and receiving and broadcasting events to clients. Create a server.js file in the root folder and a public folder to serve up the client side files:
+```js
+const http = require("http")
+const express = require("express")
+
+const app = express()
+const PORT = process.env.PORT || 8000;
+
+app.use(express.static('public'));
+
+const server = http.createServer(app)
+
+server.listen(port, () => {
+    console.log("Server working on port ${PORT}")
+})
+```
+Install a library called [nodemon](). nodemon is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected. 
+```bash
+$ npm install --save-dev nodemon
+```
+
+Add a start script to the `package.json` that executes the `server.js` file using nodemon:
+```js
+"scripts": {
+  "start": "nodemon server.js"
+},
+```
+Now, in the Terminal, run `npm start` to launch the Node application. Navigate to `http://localhost:8000`
+
+### Serving HTML
+
+Currently, we are just passing in a string of HTML to the res.send() method. Let’s send an HTML file. To store your files on the client-side, create a public directory.
+
+```bash
+$ mkdir public
+$ touch public/index.html public/main.js public/styles.css
+```
+📕 References: [How to serve static files in Express](https://www.digitalocean.com/community/tutorials/nodejs-serving-static-files-in-express), Digital Ocean
+
+Create an `index.html` file that includes a form and an element to append the text to the webpage. This file, along with the `style.css` and `main.js` files go inside the `public` folder.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Simple Chat Application</title>
+</head>
+<body>
+<div class="container">
+  <main class="chat-container"></main>
+  <form>
+    <input type="text" class="chat-input" placeholder="Type your chat message here">
+    <button>Send</button>
+  </form>
+</div>
+</body>
+</html>
+```
+
+Serve up static files such as images, CSS, client side javascript and HTML with the  `express.static` built-in middleware function.
+```js
+app.use(express.static('public'));
+```
+
+### Listening for websocket connections on the server
+
+First, set up the socket library on the server by running the following command from the Terminal:
+```bash
+$ npm install socket.io
+```
+This command installs the module and adds the dependency to the package.json file. 
+```js
+ "dependencies": {
+   "express": "^4.18.2",
+   "socket.io": "^4.6.2"
+ }
+```
+With the io.connection function we can detect a new connection and log a message to the console including the socket object, which contains some information from the client.
+
+Modify the `server.js` file to initialize a new instance of the socket library:
+```js
+const { Server } = require('socket.io')
+const io = new Server(server);
+```
+Then, listen on the `connection` event for incoming sockets and log them to the console:
+```js
+io.on('connection', socket => {
+  console.log('user connection')
+});
+```
+### Listening for messages on the client
+
+Modify the `index.html` file by adding the socket library (we’re using the CDN instead of downloading it to our directory) and the custom main.js file (this is where we will be writing our client side code to emit and handle events from the chat):
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Chat Application</title>
+    <!-- custom CSS files -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+<div class="container">
+  <main class="chat-container"></main>
+  <form id="form">
+    <input type="text" class="chat-input" placeholder="Type your chat message here">
+    <button>Send</button>
+  </form>
+</div>
+  </body>
+  <!-- socket.io library -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <!-- custom javascript file -->
+  <script src="main.js"></script>
+</html>
+```
+Inside the `main.js` file, connect the client to the socket instance running on the host that served the page (i.e. the server we just created) via the public folder:
+
+```js
+const socket = io();
+``` 
+This is the minimum setup to get the socket.io connection working. Now, we can send and receive messages to and from the server. 
+
+Let’s make it so that when the user types in a message, the server gets it as a chat message event. First, query the webpage for the form, input fields and message list. Then, make a connection with the server from the client side so users can send data to the server:
+
+```js
+const chatForm = document.querySelector('.chat-form');
+const chatInput = document.querySelector('.chat-input');
+
+socket.on(`connection`, () => {
+  // see this line in the browser console
+  console.log(`User connected on: ${socket.id}`)
+})
+```
+
+### Listening for messages [from the client] on the server
+
+Now that we have a connection established between the client and the server, we want to send messages from the server to the user (client) by generating a socket using socket.on() inside the connection. In the `server.js`, listen for message events on the server and log them to the Terminal:
+
+```js
+const { Server } = require('socket.io')
+const io = new Server(server);
+
+io.on('connection', socket => {
+  console.log('user connection')
+  socket.on('message', message => {
+    console.log(`Received message from client: ${message}`)
+  })
+});
+```
+Now data can be sent from any side so that a connection is generated between server and client. 
+
+### Sending messages [from client] to the server
+
+Then, add an event listener to the form that listens for a submit event and runs an event handler on submission called, sendMessageToServer():
+
+```js
+const sendMessageToServer = (event) => {
+  event.preventDefault()
+  if(chatInput.value){
+    console.log(chatInput.value) // see this line in the browser console
+    socket.emit('message', message)
+  }
+  chatInput.value = ""
+}
+```
+In the event handler, send a message with the socket.emit() event.
+```js
+chatForm.addEventListener('submit', sendMessageToServer)
+```
+
+### Forward messages from client to all connected clients
+
+There are a couple ways to send events to all the connected users (clients), using io.sockets.emit() or io.emit()
+```js
+socket.on('message', message => {
+  console.log(`Received message from client: ${message}`)
+  io.sockets.emit('message', message)
+})
+```
+
+[show screenshot of browser window]
+
+To send events to all the connected clients except the sender:
+```js
+socket.on('message', message => {
+  console.log(`Received message from client: ${message}`)
+  socket.broadcast.emit('message', message)
+})
+```
+
+[show screenshot of browser window]
+
+#### Handling messages from the server
+
+```js
+socket.on(`connection`, () => {
+  // see this line in the browser console
+  console.log(`User connected on: ${socket.id}`)
+})
+```
+### 💡 Solution: [simple-chat-app](./simple-chat-app/)
+
+***
+
+## 🚧 Build a chat application with named participants
+
+You can ask the user for their name in a couple ways: (1) using the [window.prompt()](https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt) method, or (2) building a form to gather the users’ name.
+
+### [ 1. ] Using window.prompt()
+
+In the `main.js` file, store the prompt window in a variable:
+```js
+const username = prompt("Please enter a username: ", "")
+
+const sendMessageToServer = (event) => {
+  event.preventDefault()
+  if(input.value){
+    addMessage(`${username} ${input.value}`) // argument
+  }
+}
+```
+
+Then create a function called `addMessage()` that takes the username and input value passed in as a single argument, and sets it as the element’s text content. 
+```js
+const addMessage = (message) => { // parameter
+  const li = document.createElement("li")
+  li.textContent = message
+  message.appendChild(li)
+}
+```
+
+### 💡 Solution: [chat-app-with-names](./chat-app-with-names/)
+
+***
+
+### 🧩 Challenge: Build a chat application and build an HTML form to gather the users' name.
+
+### 🚧 Build a shared cursor app
+
+#### What are we building?
+
+![Chat Application Mockup](../assets/01_images/chat_app_mockup_01.png)
+
+#### Directory and File Setup
+
+```md
+shared-cursor-app
+├── node_modules/
+   └── express/
+├── public/
+├── package.json
+├── server.js
+└── .git
+```
+
+Create a new folder to serve as the root directory of this project. Navigate to the folder and and initialize a new project but running the following commands:
+
+```bash
+$ mkdir shared-cursor-app && cd shared-cursor-app
+$ npm init --yes # creates the package.json file
+```
+#### Server Setup
+
+Install the `express` package and create a server.js file:
+```bash
+$ npm install --save express
+$ touch server.js
+```
+Add the boilerplate Express code to the server.js file:
+```js
+const http = require("http")
+const express = require("express")
+
+const app = express()
+const port = process.env.PORT || 8000;
+
+const server = http.createServer(app)
+
+app.use(express.static('public'));
+
+server.listen(port, () => {
+    console.log("Server working on port ${port}")
+})
+```
+Add a start script to the package.json that executes the `server.js` file using nodemon:
+```js
+"scripts": {
+  "start": "nodemon server.js"
+},
+```
+Now, in the Terminal, run `npm start` or `node server.js` to launch the Node application. Navigate to `http://localhost:8000`
+
+#### Serving HTML
+
+Currently, we are just passing in a string of HTML to the res.send() method. Let’s send an HTML file. To store your files on the client-side, create a public directory.
+
+```bash
+$ mkdir public
+$ touch public/index.html public/main.js public/styles.css
+```
+
+Inside the `index.html` file, place a div element that has a class called container. Connect the corresponding styles.css and main.js files:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Shared Cursor Application</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
+```
+
+Listening for websocket connections on the server
+
+First, set up the socket library on the server by running the following command from the Terminal:
+```bash
+$ npm install socket.io
+```
+This command installs the module and adds the dependency to the package.json file. 
+```js
+ "dependencies": {
+   "express": "^4.18.2",
+   "socket.io": "^4.6.2"
+ }
+```
+With the io.connection function we can detect a new connection and log a message to the console including the socket object, which contains some information from the client.
+
+Modify the `server.js` file to initialize a new instance of the socket library:
+```js
+const { Server } = require('socket.io')
+const io = new Server(server);
+```
+Then, listen on the `connection` event for incoming sockets and log them to the console:
+```js
+io.on('connection', socket => {
+  console.log('user connection')
+});
+```
+Listening for messages on the client
+
+Modify the `index.html` file by adding the socket library (we’re using the CDN instead of downloading it to our directory) and the custom main.js file (this is where we will be writing our client side code to emit and handle events from the chat):
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Chat Application</title>
+    <!-- custom CSS files -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+<div class="container">
+  <main class="chat-container"></main>
+  <form id="form">
+    <input type="text" class="chat-input" placeholder="Type your chat message here">
+    <button>Send</button>
+  </form>
+</div>
+  </body>
+  <!-- socket.io library -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <!-- custom javascript file -->
+  <script src="main.js"></script>
+</html>
+```
+Inside the `main.js` file, connect the client to the socket instance running on the host that served the page (i.e. the server we just created) via the public folder:
+
+```js
+const socket = io();
+``` 
+This is the minimum setup to get the socket.io connection working. Now, we can send and receive messages to and from the server. 
+
+#### Shared Cursor Server
+
+Similar to the chat application, create a global variable to store the socket.id as well as the x and y positions of each cursor.
+```js
+const users = {};
+``` 
+Every time a user connection is made, the user’s socket id, x-position and y-position will be stored in the lookup object.
+```js
+io.on('connection', socket => {
+  console.log('user connection')
+  // create value for connected socket id
+  users[socket.id] = {
+    id: socket.id,
+    x: Math.random(),
+    y: Math.random(),
+  };
+});
+```
+Then, when the user disconnects, delete their data from the global variable:
+```js
+socket.on('disconnect', () => {
+  console.log('user disconnected');
+  delete users[socket.id];
+});
+```
+Finally, let’s handle the `state_update` 
+```js
+socket.on('state_update', userData => {
+  users[socket.id].x = userData.x; // this data is coming from the client
+  users[socket.id].y = userData.y
+})
+```
+Finally, send events to all the connected users:
+```js
+server.listen(port, () => {
+  console.log(`Socket.io server listening on port ${port}`)
+})
+
+```
+
+#### Shared Cursor Client
+
+add an event listener to the window object that calls the `handleMouseMove()` event handler when the mousemove event is fired.
+```js
+window.addEventListener(`mousemove`, e => handleMouseMove(e));
+```
+The handleMouseMove event handler will send a `state_update` event to the server via the socket.emit() method, along with the relative mouse position:
+
+```js
+const handleMouseMove = event => {
+  if(socket.connect){
+    let cursorState = {
+      x: event.clientX / window.innerWidth,
+      y: event.clientY / window.innerHeight
+    }
+  // sending updated cursor location to the server
+  socket.emit('cursor_update', cursorState)
+  }
+}
+```
+Write the `state_update` event:
+
+```js
+socket.on('cursor_update', users => {
+  console.log('list of users', users)
+  // we need to iterate over this list of users
+  for (const userId in users) {
+    console.log('User ID: ', userId) // Gs53YJopT4d4voN4AAAB
+  }
+})
+```
+
+#### Remove disconnected cursor
+
+When a client disconnects, it's cursor will remain on your screen. You'll need to remove that div from the DOM.
+
+### 💡 Solution: [shared-cursor-app](./shared-cursor-app/)
+
+***
+
+### 🧩 Challenge: 
+Create a shared drawing app based on [Exquisite Corpse](https://www.xavierbarrade.com/epicexquisitecorpse):
+
+### 🧩 Challenge Bonus
+Save the drawings to [Firebase](https://firebase.google.com/docs/web/setup) and render the images to a separate page called, `gallery.html`. Create a button that links from the main page to the gallery page.
+
+# Web Real-time Communication (WebRTC)
+
+WebRTC is both an API and a Protocol. With WebRTC, you can add real-time communication capabilities to your application. This technology enables web applications and websites to capture and stream audio and / or video media.
+
+#### What are we building?
+
+Our first WebRTC-enabled project will show a single `<video>` element on the webpage, when the user clicks the start button the browser will ask the user for permission to use the camera, and then show a live feed of the user in the browser.
+
+[screenshot]
+
+#### Directory and File Setup
+
+```
+simple-webcam
+├── node_modules/
+   └── express/
+├── public/
+├── package.json
+├── server.js
+└── .git
+```
+#### Server Setup
+
+First, we need to set up the Express server (don’t forget to include the `public` folder).
+
+Inside of the public folder, create an index.html and a video tag.
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>Webcam</title>
+</head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <button id="button">Start Webcam</button>
+</body>
+</html>
+```
+In the app.js file, we will be using the getUserMedia() method. It prompts the user for permission to use a media input. This produces a MediaStream which can include a video track, an audio track etc.
+
+The first thing we do is query the video element in the webpage. Then, we set constraints that tell the browser how to look for and process streams. Here, the constraints are set to get video with a preference for camera resolution, but no audio. 
+
+```
+const _video = document.getElementById('video')
+
+const constraints = {
+ audio: false,
+ video: true,
+}
+
+const startStream = async () => {
+// Prompt the user for permission, get the stream
+navigator.mediaDevices.getUserMedia(constraints)
+.then(stream => {
+  // attach to video object
+  video.srcObject = stream;
+
+}).catch(err => {
+  // check for errors
+  console.error(`${err.name}: ${err.message}`);
+})
+
+}
+
+```
+To have the video start only when the user clicks the Start button,add a button to the webpage, query the button and add an event listener that triggers the startStream() function when clicked.
+```
+const btn = document.getElementById('button')
+btn.addEventListener('click', startStream);
+```
+
+If we want to ensure the video playback is always set to a 16:9 aspect ratio, we can implement the following constraints:
+```
+const constraints = {
+  audio: false,
+  video: {
+    mandatory: {
+      minAspectRatio: 1.777,
+      maxAspectRation: 1.778
+    },
+    optional: [
+      { maxWidth: 640 },
+      { minWidth: 480 },
+    ]
+  }
+}
+```
+We’ve mandated the ratio but limited the pixel width and height.
+
+### 💡 Solution: [simple-webcam](./simple-webrtc-webcam/)
+
+***
+
+### 🧩 Challenge: 
+Create a photo booth. Use the Canvas API to draw a frame of our video content to the screen. Take the current feed in your video element and translate it into a single image, drawing it to a `<canvas>`.
