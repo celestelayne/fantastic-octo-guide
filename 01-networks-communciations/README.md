@@ -174,7 +174,7 @@ Then set the HTTP status code of the response.
 ```js
 res.writeHead(200);
 ```
-To serve HTML files, we load the HTML file with the fs module and use its data when writing our HTTP response. Create an HTML file with minimal content. 
+To serve HTML files, we load the HTML file with the `fs` module and use its data when writing our HTTP response. Create an HTML file with minimal content. 
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -204,7 +204,7 @@ The fs module contains a readFile() function that we’ll use to load the HTML f
 ```js
 fs.readFile(__dirname + "/index.html")
 ```
-The special variable __dirname has the absolute path of where the Node.js code is being run. Then, we append the HTML file we want rendered. If the `readFile()` promise successfully resolves, it will return data which we have named, content – the HTML file data. Use `.then()` method to handle the successfully resolved data.
+The special variable `__dirname` has the absolute path of where the Node.js code is being run. Then, we append the HTML file we want rendered. If the `readFile()` promise successfully resolves, it will return data which we have named, content – the HTML file data. Use `.then()` method to handle the successfully resolved data.
 
 Inside the `.then()` method,set the Content-Type header, write the status code to indicate success and send the client (web browser) the HTML page we served it up.
 ```js
@@ -237,11 +237,10 @@ You have now returned an HTML page from the server to the user.
 
 ### 🚧 Setting up an Express web server
 
-Learning Objective: Spinning up a web server using the Express JavaScript framework
-
 #### Directory and File Setup
 
 Open a Terminal window and create a new folder, then navigate to the newly created folder:
+
 ```bash
 $ mkdir simple-express-server
 ```
@@ -269,7 +268,7 @@ Install the `express` package:
 $ npm install express
 ```
 
-Node Package Manager (npm) keeps track of the various libraries and third-party packages of code used in a Node project. `npm install express` tells the Node Package Manager (npm) to download and install the Express library for this project to use. The above two npm commands will be necessary for every new web application that uses Express. 
+[Node Package Manager (npm)](https://www.npmjs.com/) keeps track of the various libraries and third-party packages of code used in a Node project. `npm install express` tells the Node Package Manager (npm) to download and install the Express library for this project to use. The above two npm commands will be necessary for every new web application that uses Express. 
 
 Notice that a new folder called `node_modules` was created. Open it up and you'll see that there is an express folder. `node_modules` is where the dependencies in `package.json` are downloaded to. If you look at `package.json` again, you'll see express has been added as a dependency for this project.
 
@@ -319,7 +318,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 ```
-#### Routes
+### Routes
 
 Once the web server is listening, it can respond to requests. Routes are how a server side application responds to the client request of a particular HTTP endpoint. An HTTP endpoint is a URL in the web application, examples include:
 
@@ -671,6 +670,8 @@ socket.on(`connection`, () => {
 
 ## 🚧 Build a chat application with named participants
 
+![chat-app-with-names](../assets/01_images/chat_app_mockup_02.png)
+
 You can ask the user for their name in a couple ways: (1) using the [window.prompt()](https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt) method, or (2) building a form to gather the users’ name.
 
 ### [ 1. ] Using window.prompt()
@@ -698,17 +699,16 @@ const addMessage = (message) => { // parameter
 
 ### 💡 Solution: [chat-app-with-names](./chat-app-with-names/)
 
-***
 
-### 🧩 Challenge: Build a chat application and build an HTML form to gather the users' name.
+### 🧩 Challenge: Make a copy of the simple chat application and build an HTML form to gather the users' name.
 
-### 🚧 Build a shared cursor app
+## 🚧 Build a shared cursor app
 
-#### What are we building?
+### What are we building?
 
 ![Chat Application Mockup](../assets/01_images/chat_app_mockup_01.png)
 
-#### Directory and File Setup
+### Directory and File Setup
 
 ```md
 shared-cursor-app
@@ -726,7 +726,7 @@ Create a new folder to serve as the root directory of this project. Navigate to 
 $ mkdir shared-cursor-app && cd shared-cursor-app
 $ npm init --yes # creates the package.json file
 ```
-#### Server Setup
+### Server Setup
 
 Install the `express` package and create a server.js file:
 ```bash
@@ -757,7 +757,7 @@ Add a start script to the package.json that executes the `server.js` file using 
 ```
 Now, in the Terminal, run `npm start` or `node server.js` to launch the Node application. Navigate to `http://localhost:8000`
 
-#### Serving HTML
+### Serving HTML
 
 Currently, we are just passing in a string of HTML to the res.send() method. Let’s send an HTML file. To store your files on the client-side, create a public directory.
 
@@ -783,7 +783,7 @@ Inside the `index.html` file, place a div element that has a class called contai
 </html>
 ```
 
-Listening for websocket connections on the server
+### Listening for websocket connections on the server
 
 First, set up the socket library on the server by running the following command from the Terminal:
 ```bash
@@ -809,7 +809,7 @@ io.on('connection', socket => {
   console.log('user connection')
 });
 ```
-Listening for messages on the client
+### Listening for messages on the client
 
 Modify the `index.html` file by adding the socket library (we’re using the CDN instead of downloading it to our directory) and the custom main.js file (this is where we will be writing our client side code to emit and handle events from the chat):
 ```html
@@ -882,7 +882,7 @@ server.listen(port, () => {
 
 ```
 
-#### Shared Cursor Client
+### Shared Cursor Client
 
 add an event listener to the window object that calls the `handleMouseMove()` event handler when the mousemove event is fired.
 ```js
@@ -914,113 +914,15 @@ socket.on('cursor_update', users => {
 })
 ```
 
-#### Remove disconnected cursor
+### Remove disconnected cursor
 
 When a client disconnects, it's cursor will remain on your screen. You'll need to remove that div from the DOM.
 
 ### 💡 Solution: [shared-cursor-app](./shared-cursor-app/)
 
-***
-
-### 🧩 Challenge: 
+### 🧩 Challenge
 Create a shared drawing app based on [Exquisite Corpse](https://www.xavierbarrade.com/epicexquisitecorpse):
 
-### 🧩 Challenge Bonus
-Save the drawings to [Firebase](https://firebase.google.com/docs/web/setup) and render the images to a separate page called, `gallery.html`. Create a button that links from the main page to the gallery page.
+![Shared Drawing App](../assets/01_images/exquisite_corpse_01.jpeg)
 
-# Web Real-time Communication (WebRTC)
-
-WebRTC is both an API and a Protocol. With WebRTC, you can add real-time communication capabilities to your application. This technology enables web applications and websites to capture and stream audio and / or video media.
-
-#### What are we building?
-
-Our first WebRTC-enabled project will show a single `<video>` element on the webpage, when the user clicks the start button the browser will ask the user for permission to use the camera, and then show a live feed of the user in the browser.
-
-[screenshot]
-
-#### Directory and File Setup
-
-```
-simple-webcam
-├── node_modules/
-   └── express/
-├── public/
-├── package.json
-├── server.js
-└── .git
-```
-#### Server Setup
-
-First, we need to set up the Express server (don’t forget to include the `public` folder).
-
-Inside of the public folder, create an index.html and a video tag.
-
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <title>Webcam</title>
-</head>
-<body>
-  <video id="video" autoplay playsinline></video>
-  <button id="button">Start Webcam</button>
-</body>
-</html>
-```
-In the app.js file, we will be using the getUserMedia() method. It prompts the user for permission to use a media input. This produces a MediaStream which can include a video track, an audio track etc.
-
-The first thing we do is query the video element in the webpage. Then, we set constraints that tell the browser how to look for and process streams. Here, the constraints are set to get video with a preference for camera resolution, but no audio. 
-
-```
-const _video = document.getElementById('video')
-
-const constraints = {
- audio: false,
- video: true,
-}
-
-const startStream = async () => {
-// Prompt the user for permission, get the stream
-navigator.mediaDevices.getUserMedia(constraints)
-.then(stream => {
-  // attach to video object
-  video.srcObject = stream;
-
-}).catch(err => {
-  // check for errors
-  console.error(`${err.name}: ${err.message}`);
-})
-
-}
-
-```
-To have the video start only when the user clicks the Start button,add a button to the webpage, query the button and add an event listener that triggers the startStream() function when clicked.
-```
-const btn = document.getElementById('button')
-btn.addEventListener('click', startStream);
-```
-
-If we want to ensure the video playback is always set to a 16:9 aspect ratio, we can implement the following constraints:
-```
-const constraints = {
-  audio: false,
-  video: {
-    mandatory: {
-      minAspectRatio: 1.777,
-      maxAspectRation: 1.778
-    },
-    optional: [
-      { maxWidth: 640 },
-      { minWidth: 480 },
-    ]
-  }
-}
-```
-We’ve mandated the ratio but limited the pixel width and height.
-
-### 💡 Solution: [simple-webcam](./simple-webrtc-webcam/)
-
-***
-
-### 🧩 Challenge: 
-Create a photo booth. Use the Canvas API to draw a frame of our video content to the screen. Take the current feed in your video element and translate it into a single image, drawing it to a `<canvas>`.
+The end.
