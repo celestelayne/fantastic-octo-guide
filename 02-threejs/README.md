@@ -1,6 +1,27 @@
-# Interactive 3D and 2D graphics
+# Interactive 3D graphics
 
 ## What is ThreeJS?
+
+#### What are we building?
+
+<screenshot>
+
+```md
+simple-threejs-project
+├── node_modules/
+   └── express/
+├── public/
+├── package.json
+├── server.js
+└── .git
+```
+
+Create a new folder to serve as the root directory of this project. Navigate to the folder and and initialize a new project but running the following commands:
+
+```bash
+$ mkdir simple-threejs-project && cd simple-threejs-project
+$ npm init --yes # creates the package.json file
+```
 
 
 ### Getting Started

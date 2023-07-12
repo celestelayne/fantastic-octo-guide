@@ -1,10 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
 .cursor {
   position: absolute;
   width: 2rem;
   height: 2rem;
-  /* margin-left: -1rem; */
-  /* margin-right: -1rem; */
   background: #79C234;
   border-radius: 50% 50%;
-  transition: top .1s, left .1s;
+  transform:translate(-50%,-50%);
+  /* transition: top .1s, left .1s; */
+}
+
+.cursor.hide{
+  display: none;
 }

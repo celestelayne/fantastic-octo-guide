@@ -708,7 +708,7 @@ const addMessage = (message) => { // parameter
 
 ### What are we building?
 
-![Chat Application Mockup](../assets/01_images/chat_app_mockup_01.png)
+![Chat Application Mockup](../assets/01_images/shared-cursor-app.gif)
 
 ### Directory and File Setup
 
@@ -846,11 +846,14 @@ This is the minimum setup to get the socket.io connection working. Now, we can s
 
 #### Shared Cursor Server
 
-Similar to the chat application, create a global variable to store the socket.id as well as the x and y positions of each cursor.
+In the previous project, we forwarded messages between two agents. In this project we will keep track of some **state** data: the x and y positions of each connected client. In JavaScript, state describes the status of the entire program or an individual object. In this case, the state we are keeping track of is the location of the cursor on the page. Every time you move the cursor the state (location) changes / updates.
+
+Similar to the chat application, store the x and y positions of each connected user in a global object. Create a global variable to store this information:
+
 ```js
 const users = {};
 ``` 
-Every time a user connection is made, the user’s socket id, x-position and y-position will be stored in the lookup object.
+Every time a user connection is made, the user’s socket id, x-position and y-position will be stored in the lookup object called, `users`.
 ```js
 io.on('connection', socket => {
   console.log('user connection')
@@ -869,28 +872,43 @@ socket.on('disconnect', () => {
   delete users[socket.id];
 });
 ```
-Finally, let’s handle the `state_update` 
+Next, let’s handle the `state_update`. Listen to the update event of that new socket connection, and update the x and y positions to the new positions:
 ```js
 socket.on('state_update', userData => {
   users[socket.id].x = userData.x; // this data is coming from the client
   users[socket.id].y = userData.y
 })
 ```
-Finally, send events to all the connected users:
+Add a `console.log(userData)` to the `state_update` event and you should see something like the following (the x- and y- positions being updated as you move your mouse on the webpage) in your Terminal:
+
+```bash
+state_update { x: 0.3958333333333333, y: 0.8493589743589743 }
+state_update { x: 0.3958333333333333, y: 0.8493589743589743 }
+state_update { x: 0.3958333333333333, y: 0.8509615384615384 }
+state_update { x: 0.3958333333333333, y: 0.8509615384615384 }
+state_update { x: 0.3958333333333333, y: 0.8509615384615384 }
+```
+
+Finally, broadcast the global users object to all the connected clients – within a given interval. Start the interval once the server starts, and it should automatically sync the users object to all the connected clients:
+
 ```js
 server.listen(port, () => {
   console.log(`Socket.io server listening on port ${port}`)
+  setInterval(() => {
+    socket.emit('state_update', users)
+  }, 100)
 })
 
 ```
+Using the [setInterval()](https://developer.mozilla.org/en-US/docs/Web/API/setInterval) method, executes the code snippet and sends the updated state (cursor location) to all the connected clients.
 
 ### Shared Cursor Client
 
-add an event listener to the window object that calls the `handleMouseMove()` event handler when the mousemove event is fired.
+Create an [event listener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) to the window object that calls the `handleMouseMove()` event handler when the mousemove event is fired.
 ```js
 window.addEventListener(`mousemove`, e => handleMouseMove(e));
 ```
-The handleMouseMove event handler will send a `state_update` event to the server via the socket.emit() method, along with the relative mouse position:
+The handleMouseMove event handler is a function that will send a `state_update` event to the server via the `socket.emit()` method, along with the relative mouse position:
 
 ```js
 const handleMouseMove = event => {
@@ -904,21 +922,89 @@ const handleMouseMove = event => {
   }
 }
 ```
-Write the `state_update` event:
+The server will broadcast cursor positions to all connected clients. Allowing you to visualise the other connected cursors in your own client app. Write the `state_update` event:
+
+```js
+socket.on('cursor_update', users => {
+  console.log('list of users', users)
+})
+```
+Reload the browser. You should see an incoming object, containing unique ids and coordinates:
+```bash
+{ 
+  IxKy-dixpwpaBqjzAAAB : {
+    id: 'IxKy-dixpwpaBqjzAAAB', 
+    x: 0.5219907407407407, 
+    y: 0.9855769230769231
+  }
+}
+```
+We are going to iterate over these users with a [`for...in`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) loop, and move the cursor.
 
 ```js
 socket.on('cursor_update', users => {
   console.log('list of users', users)
   // we need to iterate over this list of users
   for (const userId in users) {
-    console.log('User ID: ', userId) // Gs53YJopT4d4voN4AAAB
+    console.log('User ID: ', userId) 
   }
 })
 ```
+To move the cursor, we will check to see if a cursor with that `userId` already exists on the page. If not, we will create a new cursor:
+```js
+  for (const userId in users) {
+    console.log('User ID: ', userId) 
+    // if cursor exists then grab it
+    let cursor = document.querySelector(`#cursor-${userId}`);
+    // check if no cursor exists
+    if(!cursor){
+      // create one
+    }
+  }
+```
+To create a new cursor, we use the [createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement) method. Then, we add the `.cursor` class that we will customize in the `styles.css` file. Add that style to the cursor using `classList.add()` method. Use the [setAttribute()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) method to create a dynamic id on the cursor. Finally, append the cursor to the body of the webpage. 
+
+```js
+// if no cursor exists
+if(!cursor){
+  // then create one
+  cursor = document.createElement('div')
+  // add a class of cursor ... see style.css file for details
+  cursor.classList.add('cursor')
+  // 
+  cursor.setAttribute('id', `#cursor-${userId}`)
+  document.body.appendChild(cursor)
+}
+```
+Now, we want to update the location of the cursor on the webpage using dynamic styling. Set the left (and right) positions on the cursor element by applying the style property. 
+
+```js
+  cursor.style.left = `${users[userId].x * window.innerWidth}px`
+  cursor.style.top = `${users[userId].y * window.innerHeight}px`
+```
+Remember, 
+
+### Style the Cursor
+Add some CSS to the cursor element:
+```css
+.cursor {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  background: #79C234;
+  border-radius: 50% 50%;
+  transition: top .1s, left .1s; /* add a little animation */
+}
+```
+Now, test the app. You should see a bunch of random green circles on the screen.
+
+![](../assets/01_images/shared_cursor_app.png)
 
 ### Remove disconnected cursor
 
-When a client disconnects, it's cursor will remain on your screen. You'll need to remove that div from the DOM.
+This is still not what we want. When a client disconnects, it's cursor will remain on your screen. You'll need to remove that div from the DOM.
+
+Right now, in the `state_update` event we **only** get the connected clients. So, let's compare the currently connected clients.
 
 ### 💡 Solution: [shared-cursor-app](./shared-cursor-app/)
 
