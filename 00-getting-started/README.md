@@ -285,7 +285,18 @@ Run the following command in the Terminal to configure git to open VS Code inste
 
 ## Version Control
 
-If you don’t already have it, sign up for an account on [github.com](https://github.com/). This sequence uses it to track code changes and collaborate with others on projects.
+If you don’t already have it, sign up for an account on [github.com](https://github.com/). This course uses it to track code changes and collaborate with others on projects.
+
+### What is Version Control?
+
+Version control is the management of changes to documents, computer programs, websites, and other collections of information. Version control provides:
+* A database containing the history of changes to a set of files.
+* A set of commands for managing that database.
+
+### Why is Version Control Helpful?
+* It manage changes over time.
+* It aids sharing and collaboration.
+* It allows for experimentation.
 
 _Confirm Install_
 
@@ -303,6 +314,12 @@ There are also a few ways to install Git on Windows. The most official build is 
 
 _Configure Git_
 
+Check your Git config:
+```bash
+$ git config --list
+$ git config user.name
+```
+
 Configuring your git settings will help GitHub track your contributions and to make it easier and smoother to commit changes. Please be sure to use the same email as the one used to creat your GitHub account.
 
 ```bash
@@ -310,10 +327,19 @@ Configuring your git settings will help GitHub track your contributions and to m
  $ git config --global user.email "YOUR_GITHUB_EMAIL_ADDRESS"
 ```
 
+Set your default editor:
+```bash
+$ git config --global core.editor "code --wait"
+```
+
+Note: Read [here](https://stackoverflow.com/questions/68975299/why-should-i-use-wait-when-selecting-my-default-editor-in-git) about why to use the `--wait` flag when selecting default editor?
+
 📕 References:
 
 * [Git First Time Setup](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
 * [Setting your commit email address](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/setting-your-commit-email-address)
+* [Git Cheatsheet](../assets/00_images/Git-Cheat-Sheet.png)
+
 
 ### Directory Structure
 The following is the suggested architecture of your GitHub repo for this course:
@@ -481,6 +507,117 @@ Yay! You’re in your local repository. GitHub Desktop provides some friendly su
 * Open the repository page on GitHub in your web browser
 
 If you select, view the files in finder, you will be taken to a folder named `studious-umbrella`, this is the ‘local’ version of your github repository. It’s local address is: `/Users/your-computer-name/Documents/GitHub/studious-umbrella`. We will use this as a space to archive your projects and exercises.
+
+### Demo: Git Configuration and Skills
+
+As a class, we are going to walk through key Git skills that you will need to be successful in this course. Some of the goals of this session include:
+
+* Developing our Git skills. You will:
+
+  * Create a local Git repository.
+  * Add files.
+  * Make commits.
+  * Check the repo status.
+  * View history.
+  * Time travel.
+
+#### Part 1: Creating a Repo
+
+Create a new local Git repository:
+```
+$ cd ~/Documents/Github/solid-octo-robot
+$ mkdir sample-repo  
+$ cd sample-repo
+$ git init
+```
+
+#### Part 2: The First Commit
+
+Add two files:
+```
+$ touch README.md hello.txt  
+$ git status                  # What is an untracked file?
+$ git add -A                  # Now the files are in the stage
+$ git status
+```
+
+Commit the changes:
+```
+$ git commit -m "Added two files"
+$ git status
+$ git log
+```
+![](../assets/00_images/1-Local-Remote-Chart.png)
+
+#### Part 3:  More Commits, and Viewing the Repo History
+
+Edit the `hello.txt` file, and commit the following changes:
+
+```
+$ echo "Hello, World" >> hello.txt
+$ git status
+```
+We now see a "modified" file, but nothing is staged. Let's add our changes to the stage:
+
+```
+$ git add .
+$ git status
+```
+Now our changes are **staged** and we can do a commit:
+```
+$ git commit -m "Fixed hello.txt"
+```
+Let's view the repo history:
+```
+$ git log
+```
+* Notice all of the info in the log.
+* In what order are the commits displayed?
+
+Note: If you want to see what is in the `hello.txt` file, type the following command:
+```
+$ cat hello.txt
+```
+
+### Independent Practice: Changes and Commits
+
+Make some very simple changes to your file and commit them. Be sure to check your status and history as you go.
+
+* Suggested changes:
+  * Hello, Columbia University
+  * Hello, GSAPP
+  * Hello, CDP
+
+### Demo: Git Configuration and Skills, cont'd...
+
+#### Part 4: Cherry Picking
+
+```
+git add [filename]   
+git commit  
+git status  
+git log
+```
+#### Part 5: Diffing
+
+View unstaged differences:
+
+```
+git diff  
+
+# or  
+
+git diff [filename]   
+```
+
+View unstaged differences:
+```
+git diff --staged
+
+# or  
+
+git diff --staged [filename]  
+```
 
 ### Glossary of Git Terminology:
 
