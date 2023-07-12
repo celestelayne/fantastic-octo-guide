@@ -456,7 +456,6 @@ If you select, view the files in finder, you will be taken to a folder named `st
 
 ### GitHub in the Terminal
 
-
 _Confirm Install_
 
 To check whether git is installed on your system, run the Terminal command:
@@ -571,6 +570,17 @@ Note: If you want to see what is in the `hello.txt` file, type the following com
 ```bash
 $ cat hello.txt
 ```
+Finally, we want to push our code to the remote (github.com). The `git push` command takes two arguments:
+* A remote name, for example, `origin`
+* A branch name, for example, `main`
+
+```bash
+$ git push <remote-name> <branch-name>
+
+$ git push origin main
+```
+If you want to check the name of your remote: `git remote -v`
+If you want to check the name of your branch: `git branch`
 
 ### Independent Practice: Changes and Commits
 
