@@ -30,7 +30,7 @@ While programming it's pretty common to need to juggle the placement of multiple
 
 ## Text Editor
 
-![visual studio code](../assets/00_images/visual-studio-code-02.png)
+![visual studio code](../assets/00_images/vscode_user_interface.png)
 
 ### What is a Text Editor?
 
@@ -65,33 +65,21 @@ While programming it's pretty common to need to juggle the placement of multiple
 3. Drag the unzipped `Visual Studio Code` app to your `Applications` folder.
 4. Launch the application by clicking on the icon or press `Command + Spacebar` and type VS Code in the input field that appears
 
-📕 References: [Visual Studio Code Tips and Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+📕 References: 
+* [Visual Studio Code Tips and Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks), VS Code Documentation
+* [Visual Studio Code User Interface](https://code.visualstudio.com/docs/getstarted/userinterface), VS Code Documentation
 
 ### Add Packages
 
 Visual Studio Code’s core functionality can be extended using thousands of third-party packages that can help reduce your errors, and increase your productivity. Install [VS Code Extensions](https://code.visualstudio.com/docs/editor/extension-marketplace) in the VSC extensions sidebar.
 
-1. Click on the `Extensions` icon and search for `indent-rainbow` extension.
+1. Click on the `Extensions` icon in the Activity Bar and search for `indent-rainbow` extension.
 2. When you have found the package, click on the green `install` button.
 3. You may be prompted to reload your Visual Studio Code. That’s perfectly fine!
 4. After reloading, you will now have that extension installed and activated!
 5. Now, try searching for and adding the `open in browser` extension as well.
 
-### 🧩 Challenge: Diagram the Documents Directory
-
-Below is a diagram of the DOM (Document Object Model). You can see it is shaped like an upside down tree. In the DOM Tree, the opening and closing `<html></html>` elements form the foundation upon which the rest of the document is built. In this case, the document is your webpage.
-
-![Example of DOM Tree](../assets/00_images/dom_tree.webp)
-
-The files on your computer are also organized in a tree structure. In order to familiarize yourself with the files on your system, diagram the structure of your Documents directory (folder) on your computer.
-
-1. Open your Finder (Mac) or File Explorer (Windows) application
-2. Click on the Documents folder
-3. Draw the contents of your Documents folder using the Tree structure.
-
 ## Terminal
-
-![iTerm](../assets/00_images/visual-studio-code-03.png)
 
 Have you ever opened up the Terminal, then you may have wondered what to do next? You're not alone. Developers on macOS and Linux machines use Bash to interact with files and applications. Bash is a command-line interface shell program used extensively in Linux and macOS. The name Bash is an acronym for "Bourne Again Shell," developed in 1989 as a successor to the Bourne Shell.
 
@@ -107,7 +95,11 @@ Today, the command line still exists, even though you may have never seen it as 
 
 While Bash is famous for being the go-to CLI shell in Mac and Linux, Windows uses Command Prompt and PowerShell to perform the same functions as Bash. But, it's now possible to install Bash on Windows 10 to provide almost the same functionality as Bash in Mac and Linux.
 
-📕 References: [How to Install bash on Windows 10](https://hackernoon.com/how-to-install-bash-on-windows-10-lqb73yj3)
+![Apple Terminal](../assets/00_images/apple_terminal_01.png)
+
+📕 References: 
+* [How to Install bash on Windows 10](https://hackernoon.com/how-to-install-bash-on-windows-10-lqb73yj3)
+* [Terminal User Guide](https://support.apple.com/guide/terminal/welcome/mac), Apple
 
 ### Everything is a Command
 
@@ -141,6 +133,19 @@ $ touch index.html # uses the touch command
 
 $ ls -a # uses the -a flag
 ```
+
+### 🧩 Challenge: Diagram the Documents Directory
+
+Below is a diagram of the DOM (Document Object Model). You can see it is shaped like an upside down tree. In the DOM Tree, the opening and closing `<html></html>` elements form the foundation upon which the rest of the document is built. In this case, the document is your webpage.
+
+![Example of DOM Tree](../assets/00_images/dom_tree.webp)
+
+The files on your computer are also organized in a tree structure. In order to familiarize yourself with the files on your system, diagram the structure of your Documents directory (folder) on your computer.
+
+1. Open your Finder (Mac) or File Explorer (Windows) application
+2. Click on the Documents folder
+3. Draw the contents of your Documents folder using the Tree structure.
+
 
 ### Paths
 
@@ -236,7 +241,7 @@ There are three general ways to get help with a command.
 
 * Add `--help` or `-h` to the end of the command (e.g., `brew --help`).
 * Use the manual — or `man` — tool (e.g., `man brew`).
-* Google!
+* Google it!!!
 
 The first two options will display text using a program called `less`. Use the arrow keys to navigate. Type `q` to quit.
 
@@ -273,74 +278,6 @@ cd fantastic-octo-guide
 code index.html
 ```
 
-### Configure Git to Use Visual Studio Code
-
-When you forget to enter a commit message in the Terminal, git opens a text editor and reminds you to add a commit message.
-
-Run the following command in the Terminal to configure git to open VS Code instead of the default text editor:
-
-```bash
- $ git config --global core.editor "code --wait"
-```
-
-## Version Control
-
-If you don’t already have it, sign up for an account on [github.com](https://github.com/). This course uses it to track code changes and collaborate with others on projects.
-
-### What is Version Control?
-
-Version control is the management of changes to documents, computer programs, websites, and other collections of information. Version control provides:
-* A database containing the history of changes to a set of files.
-* A set of commands for managing that database.
-
-### Why is Version Control Helpful?
-* It manage changes over time.
-* It aids sharing and collaboration.
-* It allows for experimentation.
-
-_Confirm Install_
-
-To check whether git is installed on your system, run the Terminal command:
-
-```bash
-$ which git
-$ git --version
-```
-The output should be a directory path like `/usr/bin/git`. This is where git is installed on your machine. If you don't see any output, git is not installed on your computer.
-
-If you don’t have it installed already, the `git --version` command will prompt you to install it.
-
-There are also a few ways to install Git on Windows. The most official build is available for download on the Git website. Just go to [https://git-scm.com/download/win](https://git-scm.com/download/win) and the download will start automatically.
-
-_Configure Git_
-
-Check your Git config:
-```bash
-$ git config --list
-$ git config user.name
-```
-
-Configuring your git settings will help GitHub track your contributions and to make it easier and smoother to commit changes. Please be sure to use the same email as the one used to creat your GitHub account.
-
-```bash
- $ git config --global user.name "YOUR_GITHUB_USERNAME"
- $ git config --global user.email "YOUR_GITHUB_EMAIL_ADDRESS"
-```
-
-Set your default editor:
-```bash
-$ git config --global core.editor "code --wait"
-```
-
-Note: Read [here](https://stackoverflow.com/questions/68975299/why-should-i-use-wait-when-selecting-my-default-editor-in-git) about why to use the `--wait` flag when selecting default editor?
-
-📕 References:
-
-* [Git First Time Setup](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
-* [Setting your commit email address](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/setting-your-commit-email-address)
-* [Git Cheatsheet](../assets/00_images/Git-Cheat-Sheet.png)
-
-
 ### Directory Structure
 The following is the suggested architecture of your GitHub repo for this course:
 
@@ -363,7 +300,7 @@ fantastic-octo-guide
     ├── 04_assignment
     └── README.md
 └── index.html # entry point of the website
-```
+``` 
 
 * Navigate into the directory you create last class:
  * First, figure out where you are by typing the command to print your working directory, `pwd`.
@@ -449,7 +386,16 @@ At a high level, GitHub is a website and cloud-based service that helps develope
 * Git
 
 ### What is Version Control?
-Version control is the management of changes to documents, computer programs, websites, and other collections of information.
+Version control is the management of changes to documents, computer programs, websites, and other collections of information. Version control provides:
+* A database containing the history of changes to a set of files.
+* A set of commands for managing that database.
+
+### Why is Version Control Helpful?
+* It manage changes over time.
+* It aids sharing and collaboration.
+* It allows for experimentation.
+
+
 
 ### What is Git?
 Git is a specific open-source version control system created in 2005 by Linus Torvalds, the creator of Linux. Specifically, Git is a distributed version control system, which means that the entire codebase and history is available on every developer’s computer, which allows for easy [branching](https://www.atlassian.com/git/tutorials/using-branches) and [merging](https://www.atlassian.com/git/tutorials/using-branches/git-merge).  It can be used with any file type such as such as [Unity projects](https://unityatscale.com/unity-version-control-guide/how-to-setup-unity-project-on-github/) or [WebVR projects](https://aframe.io/), but is most often used for tracking simple codebases. 
@@ -507,6 +453,53 @@ Yay! You’re in your local repository. GitHub Desktop provides some friendly su
 * Open the repository page on GitHub in your web browser
 
 If you select, view the files in finder, you will be taken to a folder named `studious-umbrella`, this is the ‘local’ version of your github repository. It’s local address is: `/Users/your-computer-name/Documents/GitHub/studious-umbrella`. We will use this as a space to archive your projects and exercises.
+
+### GitHub in the Terminal
+
+
+_Confirm Install_
+
+To check whether git is installed on your system, run the Terminal command:
+
+```bash
+$ which git
+$ git --version
+```
+The output should be a directory path like `/usr/bin/git`. This is where git is installed on your machine. If you don't see any output, git is not installed on your computer.
+
+If you don’t have it installed already, the `git --version` command will prompt you to install it.
+
+There are also a few ways to install Git on Windows. The most official build is available for download on the Git website. Just go to [https://git-scm.com/download/win](https://git-scm.com/download/win) and the download will start automatically.
+
+_Configure Git_
+
+Check your Git config:
+```bash
+$ git config --list
+$ git config user.name
+```
+
+Configuring your git settings will help GitHub track your contributions and to make it easier and smoother to commit changes. Please be sure to use the same email as the one used to creat your GitHub account.
+
+```bash
+ $ git config --global user.name "YOUR_GITHUB_USERNAME"
+ $ git config --global user.email "YOUR_GITHUB_EMAIL_ADDRESS"
+```
+When you forget to enter a commit message in the Terminal, git opens a text editor and reminds you to add a commit message.
+
+Run the following command in the Terminal to configure git to open VS Code instead of the default text editor, thereby setting VS Code as your new default editor:
+
+```bash
+$ git config --global core.editor "code --wait"
+```
+
+Note: Read [here](https://stackoverflow.com/questions/68975299/why-should-i-use-wait-when-selecting-my-default-editor-in-git) about why to use the `--wait` flag when selecting default editor?
+
+📕 References:
+
+* [Git First Time Setup](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)
+* [Setting your commit email address](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/setting-your-commit-email-address)
+* [Git Cheatsheet](../assets/00_images/Git-Cheat-Sheet.png)
 
 ### Demo: Git Configuration and Skills
 
