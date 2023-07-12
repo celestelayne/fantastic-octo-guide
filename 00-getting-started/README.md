@@ -142,6 +142,77 @@ $ touch index.html # uses the touch command
 $ ls -a # uses the -a flag
 ```
 
+### Paths
+
+Let's assume a course directory with the following structure: 
+```md
+gsapp
+├── fantastic-octo-guide/
+    ├── 01-networks
+      ├── exercise-01
+      └── exercise-02
+    ├── 02-webgl
+    ├── 03-ar-vr
+    └── 04-arduino
+      ├── exercise-01
+      └── exercise-02
+└── index.html
+```
+
+#### What is a "path"?
+
+A path is a description that tells us (or a computer) the location of a file or directory on our device.
+
+Our terminal (shell) is always working out of one path at a time. Commands will take action in that current path (directory) unless we tell them otherwise.
+
+All paths point to a single file or directory, but we can write paths as either **relative** or **absolute**.
+
+#### Absolute Paths
+
+An absolute path will always tell us exactly where a file or directory is located. A real-world example would be a mailing address. Absolute paths start with a `/` and go from the top down (least specific to most specific).
+
+```bash
+/Milky_Way/Solar_System/Earth/USA/CA/San_Francisco
+```
+Another more realistic example would be:
+
+```bash
+/Users/celestelayne/gsapp/fantastic-octo-guide
+```
+The first slash essentially means "Start at the root of the computer's file system."
+
+Some absolute paths instead start with a `~`. This is a shortcut to the absolute path of our home directory. So, the absolute path we saw above could also be written as:
+
+```bash
+~/gsapp/fantastic-octo-guide
+```
+
+> On Macs, `~` corresponds to your user directory — `/users/your-mac-username`. On Windows, your users directory is located at `C:\Users\<username>`
+
+#### Relative Paths
+
+Relative paths start from the current working directory and are written with anything but `/` or `~`.
+
+So, if we were in our home directory, the path to this lesson's directory could be written in the following ways:
+
+```bash
+gsapp/fantastic-octo-guide/01-networks                       # relative
+~/gsapp/fantastic-octo-guide/01-networks                     # absolute
+/Users/celestelayne/gsapp/fantastic-octo-guide/01-networks   # absolute
+```
+
+If we were in a different working directory, then this relative path would point to an entirely different folder or file.
+
+Periods take on a special meaning when they are used in relative paths:
+* `.`: One dot means "relative to the current directory."
+* `..`: Two dots means "Go up to the parent directory."
+
+So, if we're in `~/gsapp/fantastic-octo-guide/01-networks`, then the relative path `../04-arduino` means "Go up one level to the `fantastic-octo-guide` folder, then down to the `04-arduino` directory."
+
+We can use more than one `..` to move up multiple levels. For example:
+
+This time, if we're in `~/gsapp/fantastic-octo-guide/01-networks/exercise-01`, entering `cd ../../04-arduino` would move us up two levels to `fantastic-octo-guide`, then down one level to `04-arduino`.
+
 ### Common Commands
 
 | Key/Command | Description 				                    | Windows |
