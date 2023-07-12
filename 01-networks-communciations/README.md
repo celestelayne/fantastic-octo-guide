@@ -426,6 +426,8 @@ The webpage should now be yellow.
 
 WebSocket is a communications protocol used to send and receive data on the internet. It maintains a persistent two-way connection between the browser and the server.
 
+Sockets allows us to create real-time, bi-directional (two-way) communication between web browsers (client) and a Node.js server. They do this by keeping a socket open on both the client and the server for the duration of the conversation/communication. The data can be text messages for a chat application, mouse positions for a collaborative drawing app or the position of a player in a multi-user game.
+
 ### 🚧 Build a chat application
 
 [Socket.IO](https://socket.io/docs/v4/) is a JavaScript library that allows the server to push information to the client in real time, when events occur on the server. It's built on top of the [Websockets API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API). We'll be using the socket.io library on both our client and NodeJS server. 

@@ -510,9 +510,9 @@ If you select, view the files in finder, you will be taken to a folder named `st
 
 ### Demo: Git Configuration and Skills
 
-As a class, we are going to walk through key Git skills that you will need to be successful in this course. Some of the goals of this session include:
+As a class, we are going to walk through key Git skills that you will need to be successful in this course. The goal of this section is to develop your Git skills. 
 
-* Developing our Git skills. You will:
+You will:
 
   * Create a local Git repository.
   * Add files.
@@ -524,7 +524,7 @@ As a class, we are going to walk through key Git skills that you will need to be
 #### Part 1: Creating a Repo
 
 Create a new local Git repository:
-```
+```bash
 $ cd ~/Documents/Github/solid-octo-robot
 $ mkdir sample-repo  
 $ cd sample-repo
@@ -534,7 +534,7 @@ $ git init
 #### Part 2: The First Commit
 
 Add two files:
-```
+```bash
 $ touch README.md hello.txt  
 $ git status                  # What is an untracked file?
 $ git add -A                  # Now the files are in the stage
@@ -542,7 +542,7 @@ $ git status
 ```
 
 Commit the changes:
-```
+```bash
 $ git commit -m "Added two files"
 $ git status
 $ git log
@@ -553,29 +553,29 @@ $ git log
 
 Edit the `hello.txt` file, and commit the following changes:
 
-```
+```bash
 $ echo "Hello, World" >> hello.txt
 $ git status
 ```
 We now see a "modified" file, but nothing is staged. Let's add our changes to the stage:
 
-```
+```bash
 $ git add .
 $ git status
 ```
 Now our changes are **staged** and we can do a commit:
-```
+```bash
 $ git commit -m "Fixed hello.txt"
 ```
 Let's view the repo history:
-```
+```bash
 $ git log
 ```
 * Notice all of the info in the log.
 * In what order are the commits displayed?
 
 Note: If you want to see what is in the `hello.txt` file, type the following command:
-```
+```bash
 $ cat hello.txt
 ```
 
@@ -592,7 +592,7 @@ Make some very simple changes to your file and commit them. Be sure to check you
 
 #### Part 4: Cherry Picking
 
-```
+```bash
 git add [filename]   
 git commit  
 git status  
@@ -602,7 +602,7 @@ git log
 
 View unstaged differences:
 
-```
+```bash
 git diff  
 
 # or  
@@ -611,7 +611,7 @@ git diff [filename]
 ```
 
 View unstaged differences:
-```
+```bash
 git diff --staged
 
 # or  
