@@ -109,7 +109,40 @@ While Bash is famous for being the go-to CLI shell in Mac and Linux, Windows use
 
 📕 References: [How to Install bash on Windows 10](https://hackernoon.com/how-to-install-bash-on-windows-10-lqb73yj3)
 
-### Basic Bash Commands
+### Everything is a Command
+
+First things first, on the command line, everything we enter is a command. When we hit enter, the command is executed.
+
+### Commands Have Outputs and Side Effects
+
+Some commands have outputs, which are displayed on the screen for us to see.
+
+Examples of commands with outputs might be:
+* `pwd`
+* `ls`
+* `cat <filename>`
+
+### Command Syntax (Flags and Arguments)
+
+Commands generally consist of three parts: the command, followed by flags (a.k.a., options), and finally, arguments.
+
+The **command** is the first "word," e.g., `ls`, `cd`, or `touch`. It acts like a verb, which generally asks, "What do I want to do?"
+
+Next come the **flags**. Think of these as "options" that tell the command how to do what it's about to do. 
+* Sometimes you won't use any options. Other times you'll use just one, or maybe even more!
+* Options usually start with one or two dashes. If the option is a letter, then use one dash (e.g., `-a`). If it's a whole word, then use two dashes (e.g., `--all`).
+
+> [Here](http://catb.org/esr/writings/taoup/html/ch10s05.html#id2948149) are some of the single-letter flags you may encounter. Note: This is not an exhaustive list.
+
+Finally, we have **arguments**. These are elements on which you want to perform an action. Usually these are file names, but, alternatively, they could be something like a URL.
+
+```bash
+$ touch index.html # uses the touch command
+
+$ ls -a # uses the -a flag
+```
+
+### Common Commands
 
 | Key/Command | Description 				                    | Windows |
 | :---        | :---                                    | :---    
@@ -125,6 +158,16 @@ While Bash is famous for being the go-to CLI shell in Mac and Linux, Windows use
 | mkdir [dir]  | Create new directory                   | mkdir [dir] 
 | cp [file] [dir]  | Copy file to directory             | xcopy [file] [dir]
 | mv [file] [new filename]  | Move/Rename, e.g. mv -v [file] [dir] | ren [file] [new filename] 
+
+### Getting Help 
+
+There are three general ways to get help with a command.
+
+* Add `--help` or `-h` to the end of the command (e.g., `brew --help`).
+* Use the manual — or `man` — tool (e.g., `man brew`).
+* Google!
+
+The first two options will display text using a program called `less`. Use the arrow keys to navigate. Type `q` to quit.
 
 ### Open Visual Studio Code from Terminal
 
@@ -378,3 +421,5 @@ If you select, view the files in finder, you will be taken to a folder named `st
 * Tag: An optional label on a commit.
 * HEAD: The commit that is currently checked out.
 * Working area: The directory and subdirectories containing the files we're currently editing.
+
+The end.
