@@ -227,9 +227,9 @@ This time, if we're in `~/gsapp/fantastic-octo-guide/01-networks/exercise-01`, e
 | cd ..        | Change to a different directory        | cd ..
 | ls  | Lists the contents of a directory               | dir
 | open [file]  | Opens a file                           | 
-| open .  | Opens the directory                         | 
+| open .  | Opens the directory                         | start .
 | clear  | Clear terminal screen                        | cls
-| touch [file]  | Create new (empty) file               | cd . nul > [filename]
+| touch [file]  | Create new (empty) file               | echo > [filename]
 | pwd  | Full path to working directory                 | cd
 | mkdir [dir]  | Create new directory                   | mkdir [dir] 
 | cp [file] [dir]  | Copy file to directory             | xcopy [file] [dir]

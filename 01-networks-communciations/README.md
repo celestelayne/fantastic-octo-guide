@@ -355,17 +355,17 @@ const fruits = ['apples', 'bananas', 'oranges']
 const animals = ['cats', 'birds', 'zebra']
 
 // routes
-app.get('/, (req, res) => {
+app.get('/', (req, res) => {
   res.send('Hello World!')
   res.send("<h1>Welcome to the chat app</h1>")
 })
 
-app.get('/fruits, (req, res) => {
+app.get('/fruits', (req, res) => {
   // send all the fruit
   res.json(fruits)
 })
 
-app.get('/animals, (req, res) => {
+app.get('/animals', (req, res) => {
   // send all the animals
   res.json(animals)
 })
@@ -399,18 +399,25 @@ A common practice in the development of a web application is to store all static
 ```
 app.use(express.static('public'));
 ```
-Make a directory in your project called `public`. Then, create three new directories, `public/scripts`, `public/styles` and `public/images` subdirectories.
+Make a directory in your project called `public`. Then, `cd` into the `public` folder and create three new files:
+```bash
+$ cd public
+
+$ touch index.html styles.css app.js
+```
+
 ```md
 simple-express-server
 ├── public/
     ├── app.js
     ├── styles.css
-    └── images/
+    └── index.html
 ├── server.js
 ├── package.json
 └── .git
 ```
-Open the `app.js` file and add a `console.log("Sanity Check: JS is working!")` to the app.js so that it appears in your browser dev tools console. In the `styles.css` file add the following:
+Open the `app.js` file and add a `console.log("Sanity Check: JS is working!")` to the `app.js` so that it appears in your browser developer tools console (Command + Option + i). In the `styles.css` file add the following to change the color of the webpage:
+
 ```css
 body {
   background: yellow;
