@@ -237,6 +237,8 @@ You have now returned an HTML page from the server to the user.
 
 ### 🚧 Setting up an Express web server
 
+Learning Objective: Spinning up a web server using the Express JavaScript framework
+
 #### Directory and File Setup
 
 Open a Terminal window and create a new folder, then navigate to the newly created folder:
@@ -244,7 +246,7 @@ Open a Terminal window and create a new folder, then navigate to the newly creat
 ```bash
 $ mkdir simple-express-server
 ```
-Change into the directory and run npm init. npm – or "Node Package Manager" – is the default package manager for JavaScript's runtime Node.js. NPM consists of two main parts:
+Change into the directory and run `npm init`. [npm](https://www.npmjs.com/) – or "Node Package Manager" – is the default package manager for JavaScript's runtime Node.js. NPM consists of two main parts:
 * The Command Line Interface, and
 * The online repository of libraries (JavaScript packages)
 
@@ -255,7 +257,7 @@ $ cd simple-express-server
 
 $ npm init -y # create package.json for the project
 ```
-> Note: The first command initializes an empty Git repository and the second walks you through creating a package.json file. The structure of the backend directory should now look like this:
+> Note: The first command initializes an empty Git repository and the second walks you through creating a `package.json` file. The structure of the backend directory should now look like this:
 
 ```md
 simple-express-server
@@ -306,11 +308,11 @@ In the Terminal, run `node server.js`:
 ```
 $ node server.js
 ``` 
-You should see: Example app listening on 3000. When using Express, our server-side console logs show up in the Terminal window. Now visit http://localhost:3000/ in your browser window and you should see "Hello World!".
+You should see: Example app listening on 3000 in the Terminal window. When using Express, our server-side console logs show up in the Terminal window. Now visit http://localhost:3000/ in your browser window and you should see "Hello World!".
 
-> Note:  Every time you make a change in your server code and want it to run, you need to end the previous server and run node server.js.
+> Note:  Every time you make a change in your server code and want it to run, you need to end the previous server and run `node server.js`.
 
-Let’s test this by placing a console.log() with the req and res parameters inside the app.get() method for the `/` path. (The / path is often called the "root" path.) Restart the server and briefly check out what the req and res parameters return to the Terminal.
+Let’s test this by placing a console.log() with the req and res parameters inside the app.get() method for the `/` path. (The / path is often called the "root" path.) Restart the server and briefly check out what the `req` and `res` parameters return to the Terminal.
 
 ```js
 app.get('/', (req, res) => {
@@ -323,7 +325,7 @@ app.get('/', (req, res) => {
 Once the web server is listening, it can respond to requests. Routes are how a server side application responds to the client request of a particular HTTP endpoint. An HTTP endpoint is a URL in the web application, examples include:
 
 ```bash
-https://localhost:8000/fruits
+https://localhost:3000/fruits
 ```
 Let's look at the anatomy of the above URL:
 * https is the protocol
@@ -351,13 +353,13 @@ In the server lets set up a couple dummy datasets (sometimes called seed data) a
 
 ```js
 // dummy dataset
-const fruits = ['apples', 'bananas', 'oranges']
+const fruits = ['apples', 'bananas', 'oranges'] // this is an array
 const animals = ['cats', 'birds', 'zebra']
 
 // routes
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-  res.send("<h1>Welcome to the chat app</h1>")
+  res.send('Hello World!') // unstyled
+  res.send("<h1>Welcome to the chat app</h1>") // styled
 })
 
 app.get('/fruits', (req, res) => {
@@ -373,6 +375,8 @@ app.get('/animals', (req, res) => {
 Add an `app.get()` method for the path `/fruits`. Inside the new route, use `res.json(fruits)` to respond with some JSON containing all the fruit from our fruits variable. Do the same for the `/animals` route.
 
 > Restart the server and you should see the fruit when hit http://localhost:3000/fruits
+
+Note: The `res.send()` and `res.json()` methods are identical when an object or array is passed.
 
 
 <details>
@@ -401,11 +405,11 @@ app.use(express.static('public'));
 ```
 Make a directory in your project called `public`. Then, `cd` into the `public` folder and create three new files:
 ```bash
+$ mkdir public
 $ cd public
-
 $ touch index.html styles.css app.js
 ```
-
+The directory structure should look like the following:
 ```md
 simple-express-server
 ├── public/
@@ -416,7 +420,32 @@ simple-express-server
 ├── package.json
 └── .git
 ```
-Open the `app.js` file and add a `console.log("Sanity Check: JS is working!")` to the `app.js` so that it appears in your browser developer tools console (Command + Option + i). In the `styles.css` file add the following to change the color of the webpage:
+In the `index.html` file, add the boilerplate for a basic webpage:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Express Server</title>
+</head>
+<body>
+    <!-- code in here -->
+</body>
+</html>
+```
+Next, use the `link` element to connect the `style.css` file to the `index.html` file.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Express Server</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- code in here -->
+</body>
+</html>
+```
+In the `styles.css` file add the following to change the color of the webpage:
 
 ```css
 body {
@@ -425,7 +454,23 @@ body {
 ```
 The webpage should now be yellow.
 
-### 💡 Solution: [simple-express-server]()
+Finally, the `app.js` file and add a `console.log("Sanity Check: JS is working!")` to the file so that it appears in your browser developer tools console (Command + Option + i). 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Express Server</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- code in here -->
+    
+</body>
+</html>
+```
+
+### 💡 Solution: [simple-express-server](./simple-express-server/)
 
 ***
 
@@ -454,7 +499,7 @@ simple-chap-app
 ├── public/
     ├── app.js
     ├── styles.css
-    └── images/
+    └── index.html
 ├── server.js
 ├── package.json
 └── .git
@@ -477,14 +522,14 @@ const http = require("http")
 const express = require("express")
 
 const app = express()
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(express.static('public'));
 
 const server = http.createServer(app)
 
 server.listen(port, () => {
-    console.log("Server working on port ${PORT}")
+    console.log(`Server working on port ${PORT}`)
 })
 ```
 Install a library called [nodemon](). nodemon is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected. 
@@ -755,7 +800,7 @@ const server = http.createServer(app)
 app.use(express.static('public'));
 
 server.listen(port, () => {
-    console.log("Server working on port ${port}")
+    console.log(`Server working on port ${port}`)
 })
 ```
 Add a start script to the package.json that executes the `server.js` file using nodemon:
