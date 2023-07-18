@@ -4,28 +4,11 @@
 
 #### What are we building?
 
-<screenshot>
-
-```md
-simple-threejs-project
-├── node_modules/
-   └── express/
-├── public/
-├── package.json
-├── server.js
-└── .git
-```
-
-Create a new folder to serve as the root directory of this project. Navigate to the folder and and initialize a new project but running the following commands:
-
-```bash
-$ mkdir simple-threejs-project && cd simple-threejs-project
-$ npm init --yes # creates the package.json file
-```
-
+![](../assets/02_images/sphere_cube_01.gif)
 
 ### Getting Started
-First, create a new directory called `simple-threejs-project`
+First, unzip the project in Google Drive called, `simple-threejs-project`. Alternatively, you can create this project from scratch by running the following commands:
+
 ```bash
 $ mkdir simple-threejs-project
 ```
