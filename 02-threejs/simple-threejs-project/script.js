@@ -4,6 +4,15 @@ import * as THREE from 'three';
 // addons
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// debugging
+import datgui from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/+esm'
+import statsJs from 'https://cdn.jsdelivr.net/npm/stats-js@1.0.1/+esm'
+
+const stats = new statsJs
+stats.showPanel(0)
+document.body.appendChild( stats.dom );
+// console.log(stats.)
+
 // get a reference to the container that will hold the scene
 const container = document.querySelector('#scene-container');
 
@@ -83,7 +92,16 @@ scene.add(directLight)
 // orbit controls --> zoom in/out with scroll, pan with right-click, and drag to orbit
 const controls = new OrbitControls( camera, renderer.domElement );
 
+// DAT GUI DEBUGGING
+const gui = new datgui.GUI({name: 'Basic Project'});
+// console.log(gui)
+const cameraFolder = gui.addFolder('Camera')
+cameraFolder.add(camera.position, 'z', 0, 30)
+cameraFolder.open()
+
+
 function update() {
+
   // call the update() function every frame - creates a loop
   requestAnimationFrame(update);
 
@@ -93,6 +111,8 @@ function update() {
 
   // render the updated scene and camera
   renderer.render(scene, camera)
+
+  stats.update()
 }
 
 // call the update() function

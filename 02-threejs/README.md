@@ -508,4 +508,73 @@ loader.load('./models/Avocado/Avocado.gltf', function(gltf){
 },
 ```
 
+## Debugging Utilities
+
+An important part of coding is being able to recognize and fix your mistakes – aka debugging. Sometimes these mistakes are typos and other times they are a bit more complex. Fortunately, ThreeJS has available a few customizable debuggin UIs.
+
+### dat.GUI
+
+[dat.GUI](https://github.com/dataarts/dat.gui) is a lightweight graphical user interface for changing variables in JavaScript.[lil-gui](https://lil-gui.georgealways.com/#Guide#Installation) is a more well-documented substitute for dat.GUI. To implement dat.GUI, place the CDN just inside the closing body tag:
+```js
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+```
+In the `main.js` file, import the datgui module:
+```js
+import datgui from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/+esm'
+```
+Just before the `animate` function, declare a new instance of dat.GUI. This will create an empty panel on the top right corner of the screen.
+```js
+// declare the gui variable
+const gui = new datgui.GUI({name: 'Basic Project'});
+```
+There are different types of elements you can add to that panel:
+* color
+* text
+* folder
+
+Let's add a folder for the camera to experiment with the camera position. Then, add the folder to the panel. The first parameter is the object (in this case the camera) and the second parameter is the property of that object you want to tweak (in this case, the z-index).  The final two numbers are the upper and lower bounds of the camera position's range.
+```js
+const cameraFolder = gui.addFolder('Camera')
+cameraFolder.add(camera.position, 'z', 0, 30)
+cameraFolder.open()
+```
+The dat.GUI GitHub page has an [example UI](https://github.com/dataarts/dat.gui).
+
+### Stats.js
+
+[stats.js](https://github.com/mrdoob/stats.js) provides a simple info box that will help you monitor your code performance. It monitors:
+* FPS – Frames rendered in the last second. The higher the number the better.
+* MS – MS Milliseconds needed to render a frame. The lower the number the better.
+* MB – MBytes of allocated memory.
+
+To implement `stats.js`, place the CDN just inside the closing body tag:
+```js
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/7/Stats.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/7/Stats.js"></script>
+```
+In the `main.js` file, import the `statsJs` module:
+```js
+import statsJs from 'https://cdn.jsdelivr.net/npm/stats-js@1.0.1/+esm'
+```
+Declare a new instance of the statsJs module. This will create an empty panel on the top left corner of the screen. To show the stats panel, use the showPanel() attribute and pass in one  of the options – 0: fps, 1: ms, 2: mb, 3+: custom. 
+```js
+// declare the stats variable
+const stats = new statsJs
+// 0: fps, 1: ms, 2: mb, 3+: custom
+stats.showPanel(0)
+document.body.appendChild( stats.dom );
+```
+Finally, make sure that we update the stats object whenever the render function is called. 
+```js
+function animate() {
+  requestAnimationFrame(update);
+  renderer.render(scene, camera)
+  // update the stats object on render
+  stats.update()
+}
+animate();
+```
+Note: click on the panel to toggle through the monitor options.
 ***
+
