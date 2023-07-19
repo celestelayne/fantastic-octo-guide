@@ -575,6 +575,8 @@ function animate() {
 }
 animate();
 ```
+![](../assets/02_images/debugging_utilities_01.png)
+
 Note: click on the panel to toggle through the monitor options.
 ***
 
