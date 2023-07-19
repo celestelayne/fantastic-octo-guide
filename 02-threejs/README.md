@@ -168,6 +168,10 @@ const container = document.querySelector('#scene-container');
 const WIDTH = container.innerWidth
 const HEIGHT = container.innerHeight
 ```
+Set the scene's background color to the same color as the `#scene-container` since the default color is black:
+```js
+scene.background = new THREE.Color('#233143');
+```
 
 ## Set Up the Camera
 
@@ -273,33 +277,56 @@ Finally, create the Mesh and pass in the geometry and material as parameters:
 // create the mesh
 const cube = new THREE.Mesh( geometry, material );
 ```
-Position the mesh within the scene and add the mesh to the scene. We can also set a rotation by each axis.
+Position the mesh within the scene and add the mesh to the scene.
 ```js
-// set position and rotation
+// set position
 cube.position.set()
-cube.rotation.set((15/180) * Math.PI, 0, 0)
 // pass mesh to the scene
 scene.add(cube)
 ```
 ## Geometry -- Sphere
 
 <details>
- <summary>🧩 Challenge: Create a ball mesh using the `SphereGeometry` and `MeshBasicMaterial` methods then, add it to the scene.</summary>
+ <summary>🧩 Challenge: Create a ball mesh using the <b><a href="https://threejs.org/docs/#api/en/geometries/SphereGeometry">SphereGeometry</a></b> and <b><a href="https://threejs.org/docs/#api/en/materials/MeshBasicMaterial">MeshBasicMaterial</a></b> methods then, add it to the scene.</summary>
 
   <code>
-
+  
+  ```js
     const ballGeometry = new THREE.SphereGeometry( 1.5, 32, 32 );
     // create a material
     const ballMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
     // create mesh with geometry and material
     const ball = new THREE.Mesh( ballGeometry, ballMaterial );
     // set position
-    cube.position.set(-4, 3, 0);
+    ball.position.set(-4, 3, 0);
     // pass ball mesh to the scene
     scene.add(ball)
+  ```
   </code>
-
 </details>
+
+## Animation Loop
+
+If we want to animate the scene, the first thing that we need to do is find some way to re-render the scene at a specific interval. For this behavior we will use [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame), with it we can specify a function that is called at an interval. This interval is defined by the browser.
+
+Animations, when using Three.js, work like stop motion. You move the objects, and you do a render. Then you move the objects a little more, and you do another render. The more you move the objects between renders, the faster they'll appear to move.
+
+The screen you are looking at runs at a specific frequency. We call that a frame rate. The frame rate mostly depends on the screen, but the computer itself has limitations. Most screens run at 60 frames per second – meaning about a frame every 16ms. 
+
+`requestAnimationFrame` is a built-in browser method that schedules frames in sync with the refresh rate of your monitor and will smoothly reduce the frame rate if your hardware cannot keep up.
+
+To create the animation loop, we create an `animate()` function. Then, we pass the animate function as an argument to request a frame for animation. This will cause the render function to be called at a regular interval. Finally, moving the `renderer.render` inside the animate function will call it over and over to generate a stream of frames.
+
+```js
+const animate = () => {
+  // call the animate() function every frame - creates a loop
+  requestAnimationFrame(animate)
+  // render the updated scene and camera
+  renderer.render(scene, camera);
+}
+// don't forget to call the function
+animate()
+```
 
 ## Orbit Controls
 
@@ -324,41 +351,34 @@ In the `main.js` file, import the orbit controls library:
 ```js
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 ```
-Orbit controls takes two parameters: a camera and the canvas, stored in renderer.domElement.
+Create a new instance of the orbit controls which takes two parameters: a camera and the canvas, stored in `renderer.domElement`.
 ```js
 // orbit controls allow us to pan with the mouse
 const controls = new OrbitControls( camera, renderer.domElement );
 ```
 
-```js
-function update() {
-  // call the update() function every frame - creates a loop
-  requestAnimationFrame(update);
+## Animate an Object
 
-  controls.update();
-
-  // render the updated scene and camera
-  renderer.render(scene, camera)
-}
-
-// call the update() function
-update();
-```
-
-## Animation
-
-If we want to animate the scene, the first thing that we need to do is find some way to re-render the scene at a specific interval. For this behavior we will use `requestAnimationFrame`, with it we can specify a function that is called at an interval. This interval is defined by the browser.
+To rotate the cube we use the `rotation` attribute of an Object3D. It will rotate the object around its axis.
 
 ```js
-cube.rotation.set((15/180) * Math.PI, 0, 0)
+const animate = () => {
+  requestAnimationFrame(animate)
 
-function update() {
+  // increase the cube's rotation each frame
   cube.rotation.x += 0.01
   cube.rotation.y += 0.01
   cube.rotation.z += 0
-}
-```
 
+  renderer.render(scene, camera);
+}
+animate()
+```
+Here, `cube` is the Mesh. It's attribute `rotation` is responsible for the objects rotation in [radians](https://www.mathsisfun.com/geometry/radians.html). We have incremented the rotation of the x and y axes.
+
+## Challenge: 
+* Play with the animation speed.
+* Animate some other property of the mesh, e.g. position
 
 ## Lighting
 
@@ -366,24 +386,126 @@ function update() {
 
 _By default, the light points down from above_
 
-A mesh with basic material doesn’t need any light But the Lambert material and Phong material require light. We'll add two lights - an ambient light and a directional light.
+There are two ways objects in a room can receive light:
+* Directly: light rays that come directly from the bulb and hit an object.
+* Indirectly: light rays that have bounced off the walls and other objects in the room before hitting an object, changing color, and losing intensity with each bounce.
 
-AmbientLight is the cheapest way of faking indirect lighting in three.js. It adds a constant amount of light from every direction to every object in the scene. To set an ambient light we set a color and an intensity. 
+### Ambient Light
 
-First update the mesh material to use `MeshLambertMaterial()` since its simplest material that cares about light.
+AmbientLight is the cheapest way of faking indirect lighting in three.js. It adds a constant amount of light from every direction to every object in the scene. To set an ambient light we set a color and an intensity.
 
 ```js
-// update the material
-const ballMaterial = new THREE.MeshLambertMaterial({color: 0x8F6D2E});
-// set the color and intensity of the ambient light
-const ambientLight = new THREE.AmbientLight("white", 0.6)
-// pass the ambient light to the scene
+// Create an ambient light
+const ambientLight = new THREE.AmbientLight('white', 0.5)
+// add it to the scene
 scene.add(ambientLight)
-
-// set the color and intensity of the directional light
-const directLight = new THREE.DirectionalLight("white", 1)
-// set the position of the directional light
-directLight.position.set(10, 10, 0)
-// pass the directional light to the scene
-scene.add(directLight)
 ```
+
+### Directional Light
+
+The `DirectionalLight` will have a sun-like effect as if the sun rays were traveling in parallel. To set an directional light we set a color and an intensity.
+
+```js
+// Create a directional light
+const directionalLight = new THREE.DirectionalLight('white', 8)
+// add it to the scene
+scene.add(directionalLight)
+```
+By default, the light will seems to come from above. To change that, you must move the whole light by using the position property like if it were a normal object.
+
+```js
+// move the light right, up, and towards us
+directionalLight.position.set(10, 10, 10)
+```
+Now the light is shining from (10,10,10), towards (0,0,0).
+
+## Challenge:
+* Try changing the color of the material. All the normal colors like red, green, or blue will work, along with many more exotic colors such as peachpuff, orchid, or papayawhip. Here is a [complete list of color names](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+* Try changing the color of the light. Watch how setting various light and material colors give the object its final color.
+* Try moving the light around (using `light.position`) and abserve the result.
+* A mesh with basic material doesn’t need any light; but the [MeshLambertMaterial](https://threejs.org/docs/#api/en/materials/MeshLambertMaterial) and [MeshPhongMaterial](https://threejs.org/docs/#api/en/materials/MeshPhongMaterial) require light. 
+  * Add an ambient light to each of these materials.
+  * Add a directional light to each of these materials.
+  * Note: See the [full list of available materials](https://threejs.org/docs/index.html?q=material#api/en/constants/Materials) in the ThreeJS docs
+
+***
+
+## 🚧 Load 3D Models
+
+Create a directory called `models`. This is where we will download the 3D models we want to use in the project. The following is a recommended directory structure: 
+
+```md
+three-blender-starter
+├── models/
+   └── Avocado/
+    ├── Avocado.bin
+    ├── Avocado.gltf
+    └── Avocado_normal.png
+├── main.js
+├── styles.css
+└── index.html
+```
+
+It is recommended to use glTF (GL Transmission Format) for ThreeJS projects. [glTF](https://www.khronos.org/gltf/) stands for GL Transmission Format and is a specification for the efficient transmission and loading of 3D scenes and models. glTF files can contain models, animations, geometries, materials, lights, cameras, or even entire scenes. This means you can create an entire scene in an external program then load it into three.js.
+
+Find glTF models here:
+* [Sketchfab](https://sketchfab.com/3d-models?features=downloadable&sort_by=-likeCount)
+* [glTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0)
+* [ThreeJS WebGL Examples](https://threejs.org/examples/#webgl_loader_gltf) and the [GitHub repository](https://github.com/mrdoob/three.js/tree/master/examples/models/gltf)
+
+Alternatively, you can create models in [Blender](https://www.blender.org/support/tutorials/) and export them to the glTF format. Blender is an open-source 3D graphics application that can be used for modeling, scene building, material creation, animation authoring etc.
+
+![](../assets/02_images/blender_export_screen.png)
+
+### Import GLTFLoader Addon
+
+Find the GLTF Loader addons in the [UNPKG](https://unpkg.com/browse/three-gltf-loader@1.111.0/) CDN. Include it in the import map:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+    "three": "https://unpkg.com/three@v0.152.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/browse/three-gltf-loader@1.111.0/index.js",
+    "three/addons/": "https://unpkg.com/three@v0.152.0/examples/jsm/"
+    }
+  }
+</script>
+```
+
+In the `main.js` file, import the GLTFLoader addon:
+```js
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+```
+Create a new instance of the loader:
+```js
+// Instantiate a loader
+const loader = new GLTFLoader();
+```
+Then, load the glTF resource and add it to the scene:
+
+```js
+// Load a glTF resource
+loader.load('./models/Avocado/Avocado.gltf', function(gltf){
+  scene.add( gltf.scene );
+},
+// called while loading is progressing
+function(xhr){
+  console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+},
+// called when loading has errors
+function(error){
+  console.log( 'An error happened' );
+})
+```
+
+Yopu'll notice that the model came in very small. To scale it up (or down), use `scale.set()` on the object:
+
+```js
+loader.load('./models/Avocado/Avocado.gltf', function(gltf){
+  scene.add( gltf.scene );
+  gltf.scene.scale.set(10, 10, 10)
+},
+```
+
+***

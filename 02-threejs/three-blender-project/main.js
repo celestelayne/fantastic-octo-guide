@@ -2,6 +2,7 @@ console.log('this file is loaded')
 
 import * as THREE from 'three';
 // addons
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // get a reference to the container that will hold the scene
@@ -28,8 +29,15 @@ scene.background = new THREE.Color(0x233143);
   ===== CAMERA
 */
 const camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
-camera.position.set(0,0,10)
+camera.position.set(4, 8, 10)
 camera.lookAt(scene.position);
+
+// add grid helper
+const size = 10;
+const divisions = 10;
+
+const gridHelper = new THREE.GridHelper( size, divisions );
+scene.add( gridHelper );
 
 /*
   ===== RENDERER
@@ -48,7 +56,8 @@ container.appendChild( renderer.domElement );
 // Instantiate a loader
 const loader = new GLTFLoader();
 // Load a glTF resource
-loader.load('./models/io_scene.gltf', function(gltf){
+loader.load('./models/Avocado/Avocado.gltf', function(gltf){
+  gltf.scene.scale.set(10, 10, 10)
   scene.add( gltf.scene );
 },
 // called while loading is progressing
@@ -59,6 +68,9 @@ function(xhr){
 function(error){
   console.log( 'An error happened' );
 })
+
+// add orbit controls
+const controls = new OrbitControls( camera, renderer.domElement );
 
 /*
   ===== LIGHTING
@@ -71,7 +83,15 @@ directLight.position.set(10, 10, 0)
 scene.add(directLight)
 
 // orbit controls --> zoom in/out with scroll, pan with right-click, and drag to orbit
-const controls = new OrbitControls( camera, renderer.domElement );
+// const controls = new OrbitControls( camera, renderer.domElement );
 
 // render the updated scene and camera
-renderer.render(scene, camera)
+// renderer.render(scene, camera)
+
+function animate() {
+  requestAnimationFrame( animate );
+
+  renderer.render(scene, camera);
+}
+
+animate()
