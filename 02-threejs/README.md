@@ -143,7 +143,13 @@ The `main.js` file is the entry point for the project. This is where we define t
 
 ## Define the Scene
 
-Think of the scene like a tiny universe where all your 3D objects live. The scene defines a coordinate system called World Space which is a 3D Cartesian coordinate system. The very center of the scene is the point (0,0,0), or origin.
+Think of the scene like a tiny universe where all your 3D objects live. The scene defines a coordinate system called World Space which is a 3D Cartesian coordinate system. 
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/3D_coordinate_system.svg/2048px-3D_coordinate_system.svg.png)
+_Three-dimensional coordiate system_
+
+
+The very center of the scene is the point (0,0,0), or origin.
 
 ![](../assets/02_images/scene_position.png)
 
@@ -153,7 +159,7 @@ To create a scene, use the [Scene]() class:
 // create the scene
 const scene = new THREE.Scene();
 ```
-Next, query the scene container element in the `index.html` file and set the width and height to that of the browser window.
+Next, query the scene container element in the `index.html` file and set the width and height to that of the scene container. These variables will be used later to set the aspect ratio on the camera.
 ```js
 // get a reference to the container that will hold the scene
 const container = document.querySelector('#scene-container');
@@ -185,7 +191,7 @@ For this project we will be using the [`PerspectiveCamera()`](https://threejs.or
 3. Near Clipping Pane: the boundary plane closest to the camera, anything closer to the camera will not be rendered
 4. Far Clipping Pane: the boundary plane farthest from the camera, anything beyond this pane will not be rendered
 
-At this point, let’s set up some global variables for the camera four parameters and pass them into the PerspectiveCamera method:
+At this point, let’s set up some global variables for the camera's four parameters and pass them into the `PerspectiveCamera()` method:
 
 ```js
 const FOV = 75
@@ -196,19 +202,44 @@ const FAR = 100
 // camera
 const camera = new THREE.PerspectiveCamera( FOV, ASPECT, NEAR, FAR );
 ```
-
 The four parameters passed into the `PerspectiveCamera()` define the frustum. 
+
+### Position the Camera
+Every object we create is initially positioned at the center of our scene, the point (0,0,0). Which is where our camera is currently located. Let's move it towards us. 
+
+```js
+camera.position.set(0, 0, 10)
+```
 
 ## Set Up the Renderer
 
-Finally, we draw or render the scene into the `<canvas>` element.
+Finally, we draw or render the scene into the `<canvas>` element using the `WebGLRenderer`.
 ```js
 // renderer
 const renderer = new THREE.WebGLRenderer();
 ```
-In this one line, we tell the renderer to create an image of the scene using the camera and output the image to the canvas element.
+In this one line, we tell the renderer to create an image of the scene using the camera and output the image to the canvas element. Then, tell the renderer the size of our scene:
 
-Together, the scene, camera, and renderer give us the basic scaffolding of a three.js application. Now you're ready to fill it with objects.
+```js
+// set the size
+renderer.setSize( WIDTH, HEIGHT );
+// add automatically created canvas element to the webpage
+container.appendChild( renderer.domElement );
+```
+The renderer will draw our scene from the viewpoint of the camera into a `<canvas>` element. The element has been automatically created for us and is stored in `renderer.domElement`. In order to see it, we need to append it to the `#scene-container` using JavaScripts' `appendChild()` method.
+
+Check the Elements tab in the Developer Console to see the `<canvas>` element nested inside the `#scene-container`.
+
+![](../assets/02_images/canvas_append_to_container.png)
+
+## Render the scene
+
+Together, the scene, camera, and renderer give us the basic scaffolding of a three.js application.
+
+```js
+renderer.render(scene, camera);
+```
+Now you're ready to fill the scene with objects.
 
 ## Define Object
 
@@ -270,38 +301,14 @@ scene.add(cube)
 
 </details>
 
-
-## Lighting
-
-![]()
-
-_By default, the light points down from above_
-
-A mesh with basic material doesn’t need any light But the Lambert material and Phong material require light. We'll add two lights - an ambient light and a directional light.
-
-AmbientLight is the cheapest way of faking indirect lighting in three.js. It adds a constant amount of light from every direction to every object in the scene. To set an ambient light we set a color and an intensity. 
-
-First update the mesh material to use `MeshLambertMaterial()` since its simplest material that cares about light.
-
-```js
-// update the material
-const ballMaterial = new THREE.MeshLambertMaterial({color: 0x8F6D2E});
-// set the color and intensity of the ambient light
-const ambientLight = new THREE.AmbientLight("white", 0.6)
-// pass the ambient light to the scene
-scene.add(ambientLight)
-
-// set the color and intensity of the directional light
-const directLight = new THREE.DirectionalLight("white", 1)
-// set the position of the directional light
-directLight.position.set(10, 10, 0)
-// pass the directional light to the scene
-scene.add(directLight)
-```
-
 ## Orbit Controls
 
-Orbit controls allow us to drag the mouse across the mesh and orbit around it.  It also allows the mousewheel to be used to zoom in and out of the mesh.
+One of the most popular extensions is [OrbitControls](https://threejs.org/docs/index.html?q=orbit#examples/en/controls/OrbitControls), a camera controls plugin which allows you to orbit, pan, and zoom the camera using touch, mouse, or keyboard. With these controls, we can view a scene from all angles, zoom in to check tiny details, or zoom out to get a birds-eye overview.
+
+### Importing Orbit Controls
+
+OrbitControls is an add-on, and must be imported explicitly. You can find the orbit controls library in the [UNPKG](https://unpkg.com/browse/three-orbitcontrols@2.110.3/OrbitControls.js) CDN. Add it to the import map:
+
 ```html
 <script type="importmap">
   {
@@ -313,11 +320,11 @@ Orbit controls allow us to drag the mouse across the mesh and orbit around it.  
   }
 </script>
 ```
-
+In the `main.js` file, import the orbit controls library:
 ```js
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 ```
-
+Orbit controls takes two parameters: a camera and the canvas, stored in renderer.domElement.
 ```js
 // orbit controls allow us to pan with the mouse
 const controls = new OrbitControls( camera, renderer.domElement );
@@ -350,4 +357,33 @@ function update() {
   cube.rotation.y += 0.01
   cube.rotation.z += 0
 }
+```
+
+
+## Lighting
+
+![]()
+
+_By default, the light points down from above_
+
+A mesh with basic material doesn’t need any light But the Lambert material and Phong material require light. We'll add two lights - an ambient light and a directional light.
+
+AmbientLight is the cheapest way of faking indirect lighting in three.js. It adds a constant amount of light from every direction to every object in the scene. To set an ambient light we set a color and an intensity. 
+
+First update the mesh material to use `MeshLambertMaterial()` since its simplest material that cares about light.
+
+```js
+// update the material
+const ballMaterial = new THREE.MeshLambertMaterial({color: 0x8F6D2E});
+// set the color and intensity of the ambient light
+const ambientLight = new THREE.AmbientLight("white", 0.6)
+// pass the ambient light to the scene
+scene.add(ambientLight)
+
+// set the color and intensity of the directional light
+const directLight = new THREE.DirectionalLight("white", 1)
+// set the position of the directional light
+directLight.position.set(10, 10, 0)
+// pass the directional light to the scene
+scene.add(directLight)
 ```
