@@ -328,6 +328,29 @@ const animate = () => {
 animate()
 ```
 
+## Animate an Object
+
+To rotate the cube we use the `rotation` attribute of an Object3D. It will rotate the object around its axis.
+
+```js
+const animate = () => {
+  requestAnimationFrame(animate)
+
+  // increase the cube's rotation each frame
+  cube.rotation.x += 0.01
+  cube.rotation.y += 0.01
+  cube.rotation.z += 0
+
+  renderer.render(scene, camera);
+}
+animate()
+```
+Here, `cube` is the Mesh. It's attribute `rotation` is responsible for the objects rotation in [radians](https://www.mathsisfun.com/geometry/radians.html). We have incremented the rotation of the x and y axes.
+
+## Challenge: 
+* Play with the animation speed.
+* Animate some other property of the mesh, e.g. position
+
 ## Orbit Controls
 
 One of the most popular extensions is [OrbitControls](https://threejs.org/docs/index.html?q=orbit#examples/en/controls/OrbitControls), a camera controls plugin which allows you to orbit, pan, and zoom the camera using touch, mouse, or keyboard. With these controls, we can view a scene from all angles, zoom in to check tiny details, or zoom out to get a birds-eye overview.
@@ -356,29 +379,6 @@ Create a new instance of the orbit controls which takes two parameters: a camera
 // orbit controls allow us to pan with the mouse
 const controls = new OrbitControls( camera, renderer.domElement );
 ```
-
-## Animate an Object
-
-To rotate the cube we use the `rotation` attribute of an Object3D. It will rotate the object around its axis.
-
-```js
-const animate = () => {
-  requestAnimationFrame(animate)
-
-  // increase the cube's rotation each frame
-  cube.rotation.x += 0.01
-  cube.rotation.y += 0.01
-  cube.rotation.z += 0
-
-  renderer.render(scene, camera);
-}
-animate()
-```
-Here, `cube` is the Mesh. It's attribute `rotation` is responsible for the objects rotation in [radians](https://www.mathsisfun.com/geometry/radians.html). We have incremented the rotation of the x and y axes.
-
-## Challenge: 
-* Play with the animation speed.
-* Animate some other property of the mesh, e.g. position
 
 ## Lighting
 

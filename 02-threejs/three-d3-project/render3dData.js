@@ -1,6 +1,9 @@
 console.log('script.js linked')
 
-import * as THREE from 'three';
+// import the THREE library
+import * as THREE from 'three'
+// import orbit controls
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // get a reference to the container that will hold the scene
 const container = document.querySelector('#scene-container');
