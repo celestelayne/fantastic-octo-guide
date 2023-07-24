@@ -2,6 +2,24 @@
 
 ## WebVR
 
+Learning Objective: 
+
+#### What are we building?
+
+<screenshot>
+
+#### Directory and File Setup
+
+​​```md
+hello-cube-vr-app
+├── assets/
+   ├── components/
+   └── models/
+├── styles.css
+├── main.js
+└── index.html
+```
+
 ### What is A-Frame?
 
 WebVR is a JavaScript API that allows VR experiences to run in a web browser on VR headsets, mobile phones and tablets, and regular computers. 

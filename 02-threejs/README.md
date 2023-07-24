@@ -1,5 +1,7 @@
 # Interactive 3D graphics
 
+## 🚧 Create a Simple ThreeJS Project 
+
 ## What is ThreeJS?
 
 [ThreeJS Documentation](https://threejs.org/docs/index.html#manual/en/introduction/Installation) is a JavaScript library that tries to make it as easy as possible to get 3D content on a webpage. It uses [WebGL]() in an [HTML5 canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) to render animations that alone are not possible to create with just WebGL. [WebGL (Web Graphics Library)](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) is a JavaScript API for rendering high-performance interactive 3D and 2D graphics to a `<canvas>` element within a compatible web browser without the use of plug-ins.
@@ -578,5 +580,364 @@ animate();
 ![](../assets/02_images/debugging_utilities_01.png)
 
 Note: click on the panel to toggle through the monitor options.
-***
 
+## 🚧 Create a three-dimensional bar chart 
+
+### What is SVG?
+
+Scalable Vector Graphics (SVG) is a wb-friendly vector file format. As opposed to pixel-based raster files like JPEGs, vector files store images via mathematical formulas based on points and lines on a grid. This means that vector files like SVG can be significantly resized without losing any of their quality.
+
+There are [several basic shapes](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes) used for most SVG drawing:
+  * rectangle
+  * circle
+  * ellipse
+  * line
+  * polyline
+  * polygon
+  * [paths](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths), the path is the most powerful element in the SVG library of basic shapes.
+
+Note: SVG has a coordinate system that starts from the top left corner (0, 0). Positive x-axis goes to the right, while the positive y-axis heads to the bottom. Thus, the height of the SVG has to be taken into consideration when it comes to calculating the y coordinate of an element.
+
+![]()
+
+### What is D3?
+
+Data-Driven-Documents [(D3.js)](https://d3js.org/) is an open-source JavaScript library for creating visualizations like charts, maps, and more on the web. It can help you bring data to life using SVG, Canvas and HTML
+
+### What are we building?
+
+![]()
+
+Bar charts are a useful and effective way to compare data between different groups. 
+
+x -- year
+y -- attnedance
+z -- hosts (countries)
+
+### Directory and File Setup
+
+```md
+threejs-with-d3-starter
+├── main.js
+├── styles.css
+└── index.html
+```
+### Add the D3 CDN
+
+In the `index.html` file, add the [D3](https://d3js.org/getting-started) library to the webpage using the CDN. The `<script>` elements will go in between the `<head>` tags, after the three.js and above the stylesheet. __Remember, you are building on top of an existing boilerplate threejs project.__
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreeJS D3 Project</title>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@v0.154.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/browse/three-orbitcontrols@2.110.3/OrbitControls.js",
+            "three/addons/": "https://unpkg.com/three@v0.154.0/examples/jsm/"
+          }
+        }
+    </script>
+    <!-- add the D3 script here -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="scene-container"></div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
+```
+
+In the `main.js` file, import the [D3 library](https://d3js.org/getting-started):
+```js
+//==== libraries and addons
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+```
+### Define the Chart Area 
+
+Recall, we already have a `<div id="scene-container"></div>` element in the `index.html` file with an id name, `#scene-container`. We want to attach a new `svg` element to this `div` and provide it with a few attributes.
+
+JavaScript uses methods like [querySelector()](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) to select and modify the Document Object Model (DOM) and create dynamic HTML. Similarly, D3 provides its own methods to manipulate the DOM:
+
+#### How to Select Elements in D3
+
+* `d3.select()` will take any CSS selector and return the first matching element. If there are multiple elements, use `d3.selectAll()`
+
+#### How to Modify Elements in D3
+
+* `d3.append()` appends a new element as a child of the selected element
+* `d3.attr()` updates the selected elements' attributes
+
+The following DOM manipulation methods take in a constant value as a parameter. Later on, we will write methods that take in a function as a parameter. 
+
+```js
+// set the chart margins, padding and dimensions for future use
+const chart_width = window.innerWidth;
+const chart_height = window.innerHeight - 60;
+const padding = 10;
+const margin = { top: 30, right: 0, bottom: 60, left: 30 };
+
+// append the svg to the threejs canvas
+let svg = d3
+  // a <canvas> element was automatically created and appended to the webpage, so we can select it
+  .select("canvas")
+  // append the svg element to the canvas
+  .append("svg")
+    // set the width and height attributes to the svg element
+    .attr("width", chart_width + margin.left + margin.right)
+    .attr("height", chart_height + margin.top * margin.bottom)
+    // you can giv the svg element its own class name
+    .attr("class", "bar-chart");
+```
+You should now see the SVG element in the dev tools window:
+
+!()[]
+
+With the `.bar-chart` class you can customize its color in the `styles.css` file.
+
+### Loading Data in D3
+
+D3 can handle multiple types of local or external data. For this module we will focus on the following methods of loading data:
+
+* d3.csv()
+* d3.json()
+
+```js
+  d3.csv("assets/fifa_world_cup_attendance/FIFA-World-Cup-Attendance.csv", d3.autoType)
+  .then(data => {
+    console.log(data)
+  })
+```
+Here, `d3.csv()` takes the [d3.autoType](https://observablehq.com/@d3/d3-autotype) function as an argument and detects common data types such as numbers, dates and booleans on each row of the csv as it is being read in, and convert values to the corresponding JavaScript type
+
+Why is this useful? If you don’t perform any type conversion, you’ll get strings and you cannot perform mathematical operations on strings.
+
+### What Does the Data Look Like?
+
+Our data is an array or objects which we will need to iterate over at some point to access the `Year`, `Hosts` and `Total_Attendance` properties for each row. 
+```js
+  /*
+    Shape of the data object:
+    {
+      Game(s): "Uruguay 6–1 Yugoslavia, Semi-final"
+      Hosts: "Uruguay"
+      Matches: 18
+      Total_Attendance: 590549
+      Venue: "Estadio Centenario, Montevideo"
+      Year: 1930
+    }
+  */
+```
+### Scales and Axes
+
+First let’s be clear about what it is we are visualizing: 
+  * along the x-axis is the `Year` which will be in `DateTime` format, 
+  * along the y-axis is the `Total_Attendance` which is a `Number` format, and 
+  * along the z-axis is the `Hosts` (Country) which is a `String` format. 
+
+#### Scales
+
+Think about architectural drawings, where 1 cm figures a real distance of 1 meter on the terrain, we say that the map has a 1:100 scale. 
+
+![](https://s3.amazonaws.com/studiomaven-legacy-img/Architectural+Scales.jpg)
+
+We're essentially transforming abstract data into visual representations. For example, test scores and city populations become column heights measured in pixels. These are done with scales and D3 has different scales for different purposes. We will be focusing on the following scaling functions:
+
+* scaleLinear() is probably the most commonly used scale type as they are the most suitable scale for transforming data values into positions and lengths. They are useful when creating bar charts, line charts and many other chart types. We will use this to visualize the `Total_Attendance` along the y-axis:
+    
+    * ```const y_scale = scaleLinear()```
+
+* scaleTime() is similar to scaleLinear except the domain is expressed as an array of dates. We will use this to visualize the `Year` along the x-axis:
+    
+    * ```const x_scale = scaleTime()```
+
+* scaleBand() helps to determine the geometry of the bars, taking into account padding between each bar. We will use this to visualize the `Hosts` data along z-axis:
+    
+    * ```const z_scale = scaleBand()```
+
+#### Range
+
+Every scale in D3 has two parts: a domain and a range.
+* A scale's domain describes the set of possible input values to the scale. 
+* A scale's range, on the other hand, describes the set of possible output values that the input values can be converted to.
+
+Since we're building a bar chart to display `Total_Attendance`, we'd want our `range` to describe the minimum and maximum bar sizes.
+```js
+// Declare the y (vertical position) scale, Total_Attendance
+const y_scale = scaleLinear()
+  // limit the height of the bars to the height of the chart
+  .range([chart_height, 0]) // this is flipped
+```
+Let's repeat for the `Year` where we want our `range` to describe the minimum and maximum year values:
+```js
+// Declare the x (horizontal position) scale, Year
+const x_scale = scaleTime()
+  .range([0, chart_width])
+```
+Finally, for the `Hosts` where we want our `range` to describe the minimum and maximum number of items in the dataset:
+```js
+   // Declare the z (horizontal position) scale, Hosts
+  const z_scale = d3.scaleBand()
+  .range([0, data.length])
+```
+#### Defining the Coordinate System 
+
+SVG has a coordinate system that starts from the top left corner (0, 0). Positive x-axis goes to the right, while the positive y-axis heads to the bottom. However, in algebra charts have an origin that starts from the bottom left.
+
+![](https://oreillymedia.github.io/Using_SVG/ch08-coordinates-files/coordinate-systems.svg)
+
+Defining the coordinate system means setting the origin point. To define the coordinate system, we use the `.range()` method. This method tells D3 that the larger values (height) are at top of the screen and the low values are at the bottom.
+
+![](https://3.bp.blogspot.com/-k_MVafxb3nE/UMy1Ole-oiI/AAAAAAAAAHg/zoEYlKiEYYU/s1600/coordinates.png)
+
+The format for the range is:
+```js
+.range([close_to_the_origin, far_from_the_origin])
+```
+So when we put the `chart_height` variable first, it's now associated with the top of the screen.
+
+![](https://1.bp.blogspot.com/-QN0sjXRoI9U/UMy1fS2kbqI/AAAAAAAAAHo/C75COyU6ZQk/s1600/range1.png)
+
+#### Domain
+
+In the `y_scale` domain function we're using a helper called [d3.max()](https://observablehq.com/@d3/d3-extent). Similar to `Math.max()`, it looks at our data set and figures out what is the largest value. While `Math.max()` only works on two numbers, `d3.max()` will iterate over an entire Array.
+```js
+// Declare the y (vertical position) scale, Total_Attendance
+const y_scale = scaleLinear()
+  .range([chart_height, 0])
+  .domain([0, d3.max(data, d => d["Total_Attendance"])])
+```
+In the `x_scale` domain function, we are using a helper called [d3.extent()]() and a helper function called `timeParse()`:
+```js
+    // min and max variables
+    let xMin = d3.min(data, (d) => d['Year'])
+    let xMax = d3.max(data, (d) => d['Year'])
+    // 
+    const x_scale = d3.scaleTime()
+      .domain([new Date(xMin), new Date(xMax)])
+      .range([0, chart_width])
+```
+`d3.extent()` is like a shortcut for `[d3.min(array), d3.max(array)]`, returning a two element array of the minimum and maximum values from the array. It's perfect for passing to a scale's `domain` method. 
+
+The `z_scale` domain function is a band scale so we set the domain to the name of the host countries. Using the JavaScript [map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) method we can create a new array populated with the results of each element.
+```js
+  const zScale = d3.scaleBand()
+      .domain(data.map(d => d["Hosts"])) // array of host country names
+      .range([0, data.length])
+```
+
+### Build the Bars
+
+First, we tell the browser to find the svg element and look inside it for any rectangles. If it finds rectangles, it returns them in a selection that is an array of elements. If it doesn’t find any, it returns an empty selection.
+```js
+svg.selectAll('rect')
+  .data(data)
+  .enter() // take data items one by one and perform further operations on each element
+```
+Next, we bind the data to the selection by counting and parsing each value. Since there are 23 elements in our dataset, every operation will be done 23 times going forward. In this case, we are adding twenty-three rectangles to the svg.
+```js
+svg.selectAll('rect')
+  .data(data)
+  .enter()
+    .append("rect")
+    .attr("class", "bar")
+```
+Here, the y-attribute refers to where the bars end, so its simply the scaled value of the data. To get the height attribute, we scale the data value (total attendance) and subtract it from the height of the container:
+```js
+.attr("y", (d) => y(d['Total_Attendance']))
+.attr("height", d => height - y(d["Total_Attendance"]))
+```
+Here, the x-attribute refers to the starting position of the bars and the width attribute is the calculated barWidth minus the padding between the bars.
+```js
+.attr("x", d => x_scale(formatYear(d["Year"])))
+.attr("width", barWidth - padding)
+```
+Finally, we want to get all the bars in place across the x-axis. To do this, we use the CSS transform [translate()](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate) function which will reposition each bar in the horizontal or vertical direction.
+```js
+.attr("transform", ((d, i) => {
+    let translate = barWidth * i
+    console.log(translate)
+    return `translate(${translate}, 0)`
+}))
+```
+
+### Load SVG
+ 
+The SVGLoader loads SVG from an URL and parses it into three.js entries. Add the `SVGLoader` library to the list of addons in the importmap:
+```js
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@v0.154.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/browse/svg-loader@0.0.2/index.js",
+      }
+    }
+  </script>
+```
+Then, import the module in `main.js`:
+```js
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+```
+Next, make a reference to all the `<rect>` elements and instantiate the loader:
+```js
+  // make a reference to all the svgs
+  const svgList = document.querySelectorAll("rect");
+  
+  // instantiate a loader
+  const loader = new SVGLoader();
+```
+Iterate over each svg element and grab the svg markup as a string:
+```js
+    for (let i = 0; i < svgList.length; i++) {
+      const svgMarkup = svgList[i].outerHTML
+    }
+```
+You should see the following in the developer console:
+```html
+<rect height="7.2539308227990205" width="51" transform="translate(61, 0)"></rect>
+```
+Load the SVG resource into the parse method and it is ready to be extruded:
+```js
+// load a SVG resource
+const svgData = loader.parse(svgMarkup);
+```
+Call the `paths` method on the data which will return an array of `ShapePaths`. Each of these has a property `toShapes(true)` method.
+```js
+const shape = svgData.paths[0].toShapes(true)[0];
+```
+Create the bars using [ExtrudeGeometry](https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry). ExtrudeGeometry takes two attributes:
+* shapes, Shape or an array of shapes.
+* options, Object that can contain the following parameters (steps, depth, etc)
+We'll just use two of the default options for now:
+* steps, Number of points used for subdividing segments along the depth of the extruded spline
+* depth, Depth to extrude the shape. 
+```js
+  const extrudeOptions = {
+    steps: 2,
+    depth: barWidth, // set depth to bar width
+  }
+  const geometry = new THREE.ExtrudeGeometry(shape, extrudeOptions);
+```
+The second requirement for a mesh is the material.
+```js
+const material = new THREE.MeshNormalMaterial({ 
+  color: 'green'
+});
+```
+Finally, create the Mesh and add it to the scene:
+```js
+const mesh = new THREE.Mesh( geometry, material ) ;
+scene.add( mesh );
+``` 
+Set the position of the mesh to the scene origin:
+```js
+mesh.position.set(0, 0 , 0);
+```
