@@ -459,6 +459,17 @@ Alternatively, you can create models in [Blender](https://www.blender.org/suppor
 
 ![](../assets/02_images/blender_export_screen.png)
 
+#### Export Model from Blender
+
+Check that you have the glTF exporter enabled in Blender:
+
+* Run the Blender application.
+* Go to Edit > Preferences > Add-ons
+* Search for ‘glTF’
+* Enable Import-Export glTF 2.0 format
+
+References: Read [A Step-by-Step Guide to Exporting glTF Files From Blender](https://iconscout.com/blog/export-gltf-files-from-blender)
+
 ### Import GLTFLoader Addon
 
 Find the GLTF Loader addons in the [UNPKG](https://unpkg.com/browse/three-gltf-loader@1.111.0/) CDN. Include it in the import map:
