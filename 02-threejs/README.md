@@ -606,7 +606,7 @@ Data-Driven-Documents [(D3.js)](https://d3js.org/) is an open-source JavaScript 
 
 ### What are we building?
 
-![]()
+![](../assets/02_images/threejs_d3_mockup.png)
 
 Bar charts are a useful and effective way to compare data between different groups. 
 
