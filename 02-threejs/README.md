@@ -621,10 +621,6 @@ Data-Driven-Documents [(D3.js)](https://d3js.org/) is an open-source JavaScript 
 
 Bar charts are a useful and effective way to compare data between different groups. 
 
-x -- year
-y -- attnedance
-z -- hosts (countries)
-
 ### Directory and File Setup
 
 ```md
@@ -764,15 +760,15 @@ We're essentially transforming abstract data into visual representations. For ex
 
 * scaleLinear() is probably the most commonly used scale type as they are the most suitable scale for transforming data values into positions and lengths. They are useful when creating bar charts, line charts and many other chart types. We will use this to visualize the `Total_Attendance` along the y-axis:
     
-    * ```const y_scale = scaleLinear()```
+    * ```const y_scale = d3.scaleLinear()```
 
 * scaleTime() is similar to scaleLinear except the domain is expressed as an array of dates. We will use this to visualize the `Year` along the x-axis:
     
-    * ```const x_scale = scaleTime()```
+    * ```const x_scale = d3.scaleTime()```
 
 * scaleBand() helps to determine the geometry of the bars, taking into account padding between each bar. We will use this to visualize the `Hosts` data along z-axis:
     
-    * ```const z_scale = scaleBand()```
+    * ```const z_scale = d3.scaleBand()```
 
 #### Range
 
@@ -783,14 +779,14 @@ Every scale in D3 has two parts: a domain and a range.
 Since we're building a bar chart to display `Total_Attendance`, we'd want our `range` to describe the minimum and maximum bar sizes.
 ```js
 // Declare the y (vertical position) scale, Total_Attendance
-const y_scale = scaleLinear()
+const y_scale = d3.scaleLinear()
   // limit the height of the bars to the height of the chart
   .range([chart_height, 0]) // this is flipped
 ```
 Let's repeat for the `Year` where we want our `range` to describe the minimum and maximum year values:
 ```js
 // Declare the x (horizontal position) scale, Year
-const x_scale = scaleTime()
+const x_scale = d3.scaleTime()
   .range([0, chart_width])
 ```
 Finally, for the `Hosts` where we want our `range` to describe the minimum and maximum number of items in the dataset:
@@ -822,7 +818,7 @@ So when we put the `chart_height` variable first, it's now associated with the t
 In the `y_scale` domain function we're using a helper called [d3.max()](https://observablehq.com/@d3/d3-extent). Similar to `Math.max()`, it looks at our data set and figures out what is the largest value. While `Math.max()` only works on two numbers, `d3.max()` will iterate over an entire Array.
 ```js
 // Declare the y (vertical position) scale, Total_Attendance
-const y_scale = scaleLinear()
+const y_scale = d3.scaleLinear()
   .range([chart_height, 0])
   .domain([0, d3.max(data, d => d["Total_Attendance"])])
 ```
@@ -847,7 +843,12 @@ The `z_scale` domain function is a band scale so we set the domain to the name o
 
 ### Build the Bars
 
-First, we tell the browser to find the svg element and look inside it for any rectangles. If it finds rectangles, it returns them in a selection that is an array of elements. If it doesn’t find any, it returns an empty selection.
+First, let's calculate the width of each of the bars. We will need this variable later as we build the bars and set the attributes on the rectangle elements we add to the svg (`.bar-chart`). 
+```js
+const barWidth = Math.round(chart_width / data.length)
+```
+
+Then, we tell the browser to find the svg element and look inside it for any rectangles. If it finds rectangles, it returns them in a selection that is an array of elements. If it doesn’t find any, it returns an empty selection.
 ```js
 svg.selectAll('rect')
   .data(data)
@@ -861,14 +862,12 @@ svg.selectAll('rect')
     .append("rect")
     .attr("class", "bar")
 ```
-Here, the y-attribute refers to where the bars end, so its simply the scaled value of the data. To get the height attribute, we scale the data value (total attendance) and subtract it from the height of the container:
+To get the height attribute, we scale the data value (total attendance) and subtract it from the height of the container:
 ```js
-.attr("y", (d) => y(d['Total_Attendance']))
-.attr("height", d => height - y(d["Total_Attendance"]))
+.attr("height", d => height - y_scale(d["Total_Attendance"]))
 ```
-Here, the x-attribute refers to the starting position of the bars and the width attribute is the calculated barWidth minus the padding between the bars.
+Here, the width attribute is the calculated barWidth minus the padding between the bars.
 ```js
-.attr("x", d => x_scale(formatYear(d["Year"])))
 .attr("width", barWidth - padding)
 ```
 Finally, we want to get all the bars in place across the x-axis. To do this, we use the CSS transform [translate()](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate) function which will reposition each bar in the horizontal or vertical direction.
