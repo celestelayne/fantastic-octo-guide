@@ -951,3 +951,206 @@ Set the position of the mesh to the scene origin:
 ```js
 mesh.position.set(0, 0 , 0);
 ```
+
+## 🚧 Maps
+
+### What is Mapbox?
+
+Mapbox GL JS is a JavaScript library that uses WebGL to render interactive maps from vector tiles and Mapbox styles. A WebGL map brings the possibility to render vector tiles on the client side, this way we get all the data accessible on the browser and we can interact with pretty much everything on the map.
+
+Resources:
+* [Web Mapping 1](https://github.com/CenterForSpatialResearch/mapping_architecture_urbanism_humanities/blob/master/08_WebMapping1.md) Tutorial, Center for Spatial Research (Creating markers using Mapbox GL JS )
+* [Web Mapping 2](https://github.com/CenterForSpatialResearch/mapping_architecture_urbanism_humanities/blob/master/09_WebMapping2.md) Tutorial, Center for Spatial Research (Creating a tileset using external data)
+* [Web Mapping 3](https://github.com/CenterForSpatialResearch/mapping_architecture_urbanism_humanities/blob/master/10_WebMapping3.md) Tutorial, Center for Spatial Research (Using the sensing capacity of our devices to make GPS drawings)
+* [Attach a popup to a marker instance](https://docs.mapbox.com/mapbox-gl-js/example/set-popup/), Mapbox Documentation
+
+
+### What are we building?
+
+![](../assets/02_images/mapbox_demo.png)
+
+#### Directory and File Setup
+
+```md
+mapbox-data-exercise
+├── main.js
+├── styles.css
+└── index.html
+```
+## Create the Map
+
+Mapbox has provided some [boilerplate code](https://docs.mapbox.com/mapbox-gl-js/example/simple-map/) to get us started. What we're going to do that is different from the boilerplate is put the styles and javascript into their own files – `styles.css` and `main.js`.
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Basic Mapbox Map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <!-- mapbox stylesheet links -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+
+    <!-- mapbox javascript links -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <!-- custom stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- element where the map will be appended -->
+    <div id="map"></div>
+
+    <!-- custom javascript file -->
+    <script src="main.js"></script>
+</body>
+
+</html>
+```
+
+## Access Token
+
+![](../assets/02_images/mapbox-access-token.png)
+
+Go to the [Account Page](https://account.mapbox.com/) in Mapbox to get your access token. Once you have your In the root of your project, create a `config.js` file. In that file, create an object called `config` with a key and value pair that looks like the following:
+
+```js
+const config = {
+    MAPBOX_ACCESS_TOKEN : '<YOUR MAPBOX ACCESS TOKEN HERE>'
+}
+```
+In your `index.html` file, add a script just above the `main.js` script tag for the `config.js` file. It should look like the following:
+
+```html
+<body>
+    <div id="map"></div>
+
+    <script src="config.js"></script>
+    <script src="main.js"></script>
+</body>
+```
+Now, in the `main.js` file, create a variable to store the access token:
+```js
+mapboxgl.accessToken = config.MAPBOX_ACCESS_TOKEN;
+```
+Now, we're ready to go.
+
+## Initialize the Map
+
+```js
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    center: [-73.9651476, 40.8075355], // starting position [lng, lat] Columbia University
+    zoom: 11, // starting zoom
+});
+```
+
+You should now see the map on the page.
+
+## Load API Data
+
+Set the API URL to a variable name that tells you what the dataset represents. The dataset we're using is from [NYC Open Data](https://data.cityofnewyork.us/City-Government/Post-Office/gpxw-bq7a):
+```js
+const post_office = 'https://data.cityofnewyork.us/resource/bdha-6eqy.json'
+```
+Now, we want to [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) this data and render it to the map. Write a function and pass in the `post_office` variable. Iterate over the data and log it to the browser console.
+
+```js
+const fetchPostOfficeLocations = async () => {
+    const response = await fetch(post_office);
+    const data = await response.json();
+    // console.log(data);
+    for(let i in data){
+        console.log(data[i].streetname)
+
+        let latitude = data[i].the_geom.coordinates[1]
+        let longitude = data[i].the_geom.coordinates[0]
+
+    }
+}
+fetchPostOfficeLocations()
+```
+
+Now, we have our data, let's create a marker and a popup for each post office location. In the for loop, drill down in the data object until you get the latitude and longitude. Store those values in a variable.
+
+Using 
+
+```js
+
+    for(let i in data){
+        console.log(data[i].streetname)
+
+        let latitude = data[i].the_geom.coordinates[1]
+        let longitude = data[i].the_geom.coordinates[0]
+
+        // create the marker
+        new mapboxgl.Marker({ color: 'black' })
+            .setLngLat([longitude, latitude])
+            .addTo(map);
+    }
+
+```
+For each data element, you will create a marker using `new mapboxgl.Marker()` method. See the example in the [Mapbox documentation](https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/). Then, set the latitude and longitude. Finally, add the marker to the map. Voila!
+
+To create the popup, use the `new mapboxgl.Popup()` method and set the text you want to display on the marker using the `setText()` method.
+
+```js
+  // create the content
+  let content = `${data[i].streetname} ${data[i].city}`
+  // create the popup
+  const popup = new mapboxgl.Popup({ offset: 25 }).setText(content)
+  // attach the popup to the marker
+  new mapboxgl.Marker({ color: 'black' })
+      .setLngLat([longitude, latitude])
+      .setPopup(popup)
+      .addTo(map);
+```
+
+## Load GeoJSON Data
+
+If you have your own geojson dataset, create a variable to store that data. The dataset we're using is from the Luc Wilson.
+```js
+const daylighting_geojson = "./data/Columbia__Daylight_analysis.geojson"
+```
+
+Just like the API data, let's fetch and iterate over this dataset to see what information we have available to us:
+```js
+fetch(daylighting_geojson)
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        // iterate over each data object
+        data.features.forEach(element => {
+          // log the data to the browser
+          console.log(element)
+            
+          const feb_percent_threshold = element.properties["Percent_Threshold_Daylight_Feb"]
+
+        })
+    })
+```
+
+Now that we know what our data looks like, lets load it onto the map. See the example in [Mapbox documentation](https://docs.mapbox.com/mapbox-gl-js/example/geojson-polygon/) for adding a polygon to a map using a GeoJSON source.
+```js
+map.on('load', () => {
+
+    map.addSource('columbia', {
+        type: 'geojson',
+        data: daylighting_geojson
+    });
+    // Add a layer showing the daylighting layer
+    map.addLayer({
+        'id': 'daylight-layer',
+        'type': 'fill',
+        'source': 'columbia',
+        'paint': {
+            'fill-outline-color': 'rgba(0,0,0,0.1)',
+            'fill-color': 'rgba(0,0,0,0.2)'
+        }
+    })
+})
+```
