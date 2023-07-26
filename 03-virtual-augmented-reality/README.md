@@ -10,7 +10,7 @@ Learning Objective:
 
 #### Directory and File Setup
 
-​​```md
+```md​​
 hello-cube-vr-app
 ├── assets/
    ├── components/
