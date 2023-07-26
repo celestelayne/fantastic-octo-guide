@@ -1154,3 +1154,83 @@ map.on('load', () => {
     })
 })
 ```
+
+## Mapbox and 3D Models
+
+### What is Threebox
+
+[Threebox](https://github.com/peterqliu/threebox/blob/master/docs/Threebox.md) is a three.js plugin for Mapbox GL JS. It works by adding a Three.js scene to Mapbox GL, via a custom layer.
+
+### What are we building?
+
+![](../assets/02_images/metlife_building_mapbox.png)
+
+#### Directory and File Setup
+
+```md
+mapbox-threebox-exercise
+├── config.js.js
+├── main.js
+├── styles.css
+└── index.html
+```
+
+## Load the model
+
+Custom layers allow a user to render directly into the map's GL context using the map's camera. Custom layers must have a unique id and must have the type of "custom". The renderingMode property controls whether the layer is treated as a "2d" or "3d" map layer. Use: 
+* "renderingMode": "3d" to use the depth buffer and share it with other layers
+
+```js
+map.on('style.load', function() {
+    map.addLayer({
+        id: 'custom_layer',
+        type: 'custom',
+        renderingMode: '3d',
+    })
+})
+```
+They must implement `render` and may implement prerender, `onAdd` and onRemove. We will set up a threebox scene inside the custom layer's `onAdd` function.
+```js
+map.on('style.load', function() {
+    map.addLayer({
+        id: 'custom_layer',
+        type: 'custom',
+        renderingMode: '3d',
+        onAdd: function(map, mbxContext){
+            // threebox code goes in here
+        },
+        render: function () {
+          tb.update();
+        }
+    })
+})
+```
+
+### Using Threebox
+
+Create an instance of Threebox inside the onAdd function which provides both inputs for this method. Automatically synchronizes the camera movement and events between Three.js and Mapbox GL JS.
+```js
+onAdd: function(map, mbxContext){
+  tb = new Threebox(
+    map, 
+    mbxContext,
+    { defaultLights: true }
+  );
+}
+```
+Set up the scale and import the model:
+```js
+  const scale = 3.2;
+  const options = {
+      obj: './models/metlife_building/scene.gltf',
+      type: 'gltf',
+      scale: { x: scale, y: scale, z: 2.7 },
+      rotation: { x: 90, y: -90, z: 0 },
+      units: 'meters',
+  }
+```
+Load the model, set the coordinates and the rotation of the model. Then, add the building to the threebox instance.
+
+### Using ThreeJS
+
+See this example on how to [sdd a 3D model](https://docs.mapbox.com/mapbox-gl-js/example/add-3d-model/) using ThreeJS, Mapbox Documentation
