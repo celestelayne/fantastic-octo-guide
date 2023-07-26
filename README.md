@@ -5,3 +5,6 @@
 Students will construct prototype workflows using several computational media (apps, code, scripts, hardware) to create experimental design tools and workflows that change how a designer-developer works. The goal of the class is to deepen our knowledge of computational design and code in addition to understanding that computational design itself can always be re-designed.
 
 [Live Website](https://celestelayne.github.io/fantastic-octo-guide/)
+
+## Project Links
+* [Hello Cube](https://celestelayne.github.io/fantastic-octo-guide/03-virtual-augmented-reality/hello-cube-vr-app/)

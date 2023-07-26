@@ -24,57 +24,16 @@ hello-cube-vr-app
 
 WebVR is a JavaScript API that allows VR experiences to run in a web browser on VR headsets, mobile phones and tablets, and regular computers. 
 
-Technically, A-Frame is an abstraction of three.js, a JavaScript library that uses the WebGL API to render 3D graphics in the browser.
+Technically, [A-Frame](https://aframe.io/docs/1.4.0/introduction/) is an abstraction of three.js, a JavaScript library that uses the WebGL API to render 3D graphics in the browser.
 
-A-Frame is a web framework for building virtual reality (VR) experiences for the web. At its simplest, It is an HTML web page that includes the A-Frame library, making it simple to get started.
+It is a web framework for building virtual reality (VR) experiences for the web. At its simplest, it is an HTML web page that includes the A-Frame library, making it simple to get started.
 
 ### Getting Started
 
-Create a new folder to serve as the root directory of this project. Navigate to the folder and and initialize a new project but running the following commands:
-
-```bash
-$ mkdir hello-cube-vr-app && cd hello-cube-vr-app
-$ npm init --yes # creates the package.json file
-```
-### Server Setup
-
-Install the `express` package and create a `server.js` file:
-```bash
-$ npm install express
-$ touch server.js
-```
-Add the boilerplate Express code to the `server.js` file:
-```js
-const http = require("http")
-const express = require("express")
-
-const app = express()
-const server = http.createServer(app)
-
-const port = process.env.PORT || 8000;
-
-app.use(express.static('public'));
-
-server.listen(port, () => {
-    console.log(`Server working on port ${port}`)
-})
-```
-Add a start script to the `package.json` that executes the `server.js` file using nodemon:
-```
-"scripts": {
-  "start": "nodemon server.js"
-},
-```
-Now, in the Terminal, run `npm start` or `node server.js` to launch the Node application. Navigate to `http://localhost:8000`
+Spin up a local server in the `hello-cube-vr-starter`
 
 ### Create an HTML Structure
 
-Currently, we have the server set up to use the public folder serving up our static files. Let’s create those files that we want served up to the client.
-
-```bash
-$ mkdir public
-$ touch public/index.html public/main.js public/styles.css
-```
 In the `index.html` file, start by creating a simple HTML document with basic head and body tags. Then, include the A-Frame CDN `<script>` in the `<head>` tag.
 ```html
 <!doctype html>
@@ -148,6 +107,8 @@ Access the A-Frame inspector by:
 * `<ctrl>` + `<alt>` + i (Windows)
 * `<ctrl>` + `<option>` + i (Mac)
 
+![](../assets/03_images/webvr_example_01.png)
+
 ### Populate the Environment
 
 There are two ways that we can populate the scene we’ve just created:
@@ -165,6 +126,9 @@ Let’s jump to the AFRAME documentation for the sphere primitive. The following
     position="0 4 -10" 
     scale="0.25 0.25 0.25"></a-sphere>
 ```
+
+![](../assets/03_images/webvr_example_02.png)
+
 We can also use an entity (I liken it to a div in HTML) and add attributes like geometry, material, and animation.
 ```html
 <a-entity
@@ -199,10 +163,10 @@ For characters in the game, we are going to use a 3D model created in [SketchFab
 </a-scene>
 ```
 First, download the model. Places to find 3D models include:
-* Sketchfab
-* Sketchup 3D Warehouse
+* [Sketchfab](https://sketchfab.com/3d-models?features=downloadable&sort_by=-likeCount)
+* [Sketchup 3D Warehouse](https://3dwarehouse.sketchup.com/)
 
-Then, create a `public/assets/models` folder and add the downloaded models into the folder. Preload the models using `<a-asset-item>` tag and then add it to the assets section of your code base:
+Then, create a `assets/models` folder and add the downloaded models into the folder. Preload the models using `<a-asset-item>` tag and then add it to the assets section of your code base:
 ```html
 <a-scene>
   <a-assets>
@@ -222,7 +186,9 @@ Outside the `<a-assets>` section, create several entities to load the  model:
   scale="2 2 2">
 </a-entity>
 ```
-The additional attributes available on our entity -- `position`, which sets x, y, and z coordinates on each entity; `scale`, which sets blah; and the `gltf-model`, which loads the model into the frame -- allow us to customize the placement etc of each entity.
+The additional attributes available on our entity -- `position`, which sets x, y, and z coordinates on each entity; `scale`, which defines a shrinking, stretching, or skewing transformation of an entity; and the `gltf-model`, which loads the model into the frame -- allow us to customize the placement etc of each entity.
+
+![](../assets/03_images/webvr_example_03.png)
 
 If you’d prefer to create your own 3D models, here are some places to start:
 * Rhino/Grasshopper
@@ -354,5 +320,41 @@ Then, add the sound component to one of the entities in the scene:
 ```html
 <a-entity sound="src: #crickets"></a-entity>
 ```
+
+***
+
+## WebAR
+
+### Create an HTML Structure
+
+In the index.html, add the A-Frame and ar.js scripts just before the closing head tag. These scripts contain the code that will allow you to add the augmented reality functionality to this tab.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Hello Cube Augmented Reality</title>
+  <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+  <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+</head>
+<body>
+
+  <script src="main.js"></script>
+</body>
+</html>
+```
+
+### Set Up Environment
+
+Then, add a <a-scene> element to the body:
+```html
+<body>
+    <a-scene embedded arjs>
+	
+    </a-scene>
+</body>
+```
+The arjs attribute specifies that the scene should use the AR.js library to display the augmented reality content.
+
+
 
 ### The End.

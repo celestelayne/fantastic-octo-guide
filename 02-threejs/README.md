@@ -1233,4 +1233,4 @@ Load the model, set the coordinates and the rotation of the model. Then, add the
 
 ### Using ThreeJS
 
-See this example on how to [sdd a 3D model](https://docs.mapbox.com/mapbox-gl-js/example/add-3d-model/) using ThreeJS, Mapbox Documentation
+See this example on how to [add a 3D model](https://docs.mapbox.com/mapbox-gl-js/example/add-3d-model/) using ThreeJS, Mapbox Documentation
