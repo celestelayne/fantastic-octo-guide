@@ -113,9 +113,9 @@ const padding = 10;
       .data(data)
       .enter()
         .append("rect")
-        // .attr("y", (d => { 
-        //   return yScale(d["Total_Attendance"] * 0.0001)
-        // }))
+        .attr("y", (d => { 
+          return yScale(d["Total_Attendance"] * 0.0001)
+        }))
         // .attr("height", (d => { return d["Total_Attendance"] * 0.0001 }))
         .attr("height", d => chart_height - yScale(d["Total_Attendance"]))
         .attr("width", barWidth - padding)
