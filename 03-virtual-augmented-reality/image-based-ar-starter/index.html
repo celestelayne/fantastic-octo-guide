@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Based Tracking Starter</title>
+    <!-- aframe -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- image tracking library for aframe -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <!-- custom stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="arjs-loader">
+        <div>Loading, please wait...</div>
+    </div>
+
+    <a-scene 
+        vr-mode-ui="enabled: false" 
+        renderer="logarithmicDepthBuffer: true; precision: medium;" 
+        embedded
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+        <a-nft
+            type="nft"
+            url="./assets/dino-image/dino-image-tracking"
+            smooth="true"
+            smoothCount="10"
+            smoothTolerance=".01"
+            smoothThreshold="5">
+            <a-entity
+                gltf-model="./assets/animated-cube/AnimatedCube.gltf"
+                scale="5 5 5"
+                position="50 150 0">
+            </a-entity>
+        </a-nft>
+    </a-scene>
+</body>
+
+</html>

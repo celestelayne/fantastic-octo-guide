@@ -26,6 +26,9 @@ _Ultrasonic Sensor_
 ![](https://www.aranacorp.com/wp-content/uploads/towerpro-servo-sg90.jpg)
 _Servomotor_
 
+![](https://howtomechatronics.com/wp-content/uploads/2015/07/Ultrasonic-Sensor-HC-SR04-and-Arduino-Complete-Guide-2.jpg)
+_Ultrasonic Sensor and LCD display_
+
 ## Installing the IDE
 
 [Download](https://www.arduino.cc/en/software) the appropriate IDE for your system from the Arduino website:
@@ -61,9 +64,9 @@ Open the sketch (program) File: Examples: 01.Basics: Blink. The Arduino Uno boar
 
 There is a `setup()` statement, and code within that statement runs once when the application first starts up. Then there is a `loop()` statement, which runs over and over again.
 
-`setup()` Statement: All applications must have a setup() method, even if nothing is done in them. This is because the compiler will check for this method, and if it isn’t defined, an error will occur.
+`setup()` Statement: All applications must have a `setup()` method, even if nothing is done in them. This is because the compiler will check for this method, and if it isn’t defined, **an error will occur**.
 
-`loop()` Method: 
+`loop()` Method: contains anything that needs to happen repeatedly in the application; 
 
 ## Structuring an Arduino Program
 

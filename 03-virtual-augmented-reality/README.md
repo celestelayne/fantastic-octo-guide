@@ -325,6 +325,13 @@ Then, add the sound component to one of the entities in the scene:
 
 ## WebAR
 
+There are three types of tracking in augmented reality that allow us to place digital content in different environments. 
+1. Image Tracking
+2. Location Based
+3. Marker Tracking
+
+Let's set up the environment for a standard augmented reality application and then look at each type of tracking separately.
+
 ### Create an HTML Structure
 
 In the index.html, add the A-Frame and ar.js scripts just before the closing head tag. These scripts contain the code that will allow you to add the augmented reality functionality to this tab.
@@ -332,9 +339,8 @@ In the index.html, add the A-Frame and ar.js scripts just before the closing hea
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <title>Hello Cube Augmented Reality</title>
-  <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
-  <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+  <title>Hello Cube Augmented Reality</title>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 </head>
 <body>
 
@@ -343,9 +349,11 @@ In the index.html, add the A-Frame and ar.js scripts just before the closing hea
 </html>
 ```
 
-### Set Up Environment
+### Define the Scene
 
-Then, add a <a-scene> element to the body:
+In ARjs, scenes are enclosed in <a-scene></a-scene> tags. It should be the outermost element wrapping everything else inside it.
+
+Let's create an empty scene by adding an <a-scene> element inside the <body> element:
 ```html
 <body>
     <a-scene embedded arjs>
@@ -353,8 +361,145 @@ Then, add a <a-scene> element to the body:
     </a-scene>
 </body>
 ```
-The arjs attribute specifies that the scene should use the AR.js library to display the augmented reality content.
+The `arjs` attribute specifies that the scene should use the `AR.js` library to display the augmented reality content.
+
+### Image Based Tracking
+
+Image Tracking makes it possible to scan a picture, a drawing, any image, and show content over it. The software tracks interesting points in the image and using them, it estimates the position of the camera.  These interesting points (aka "Image Descriptors") are created using the NFT Marker Creator, a tool available for creating NFT markers.
+
+Resource: [Creating Good Image Markers](https://github.com/Carnaux/NFT-Marker-Creator/wiki/Creating-good-markers)
+
+#### Import the Library
+
+```js
+// import the ar.js with image tracking just below the aframe library
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+```
+
+#### Add the Loader
+
+You can add any custom loader that will be removed when image descriptors are loaded, just use the `.arjs-loader` CSS class on it.
+
+```js
+  // minimal loader shown until image descriptors are loaded ... loading may take a while according to the device computational power
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+```
+Use the following styles on the loader:
+
+```css
+.arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+}
+```
+#### Creating Image Descriptors
+
+Image descriptors are a set of files that describe your image and are needed by the tracking algorithm. We will use the web-based version of the [NFT Marker Creator](https://carnaux.github.io/NFT-Marker-Creator/#/). Upload your image and click `generate` to create the descriptors. Once the image is processed __three files__ will automatically download with `.fset`, `.fset3`, and `.iset` extensions. 
+
+![](../assets/04_images/nft-image-creator.png)
+
+#### Spin Up the Local HTTP Server
+
+```bash
+python3 -m http.server 3000
+```
+
+#### Scene Attributes
+
+```html
+<body>
+    <a-scene 
+      vr-mode-ui="enabled: false"
+      renderer="logarithmicDepthBuffer: true; precision: medium;"
+      embedded 
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+    </a-scene>
+</body>
+```
+
+* The [vr-mode-ui](https://aframe.io/docs/1.4.0/components/vr-mode-ui.html) component allows disabling of UI such as an Enter VR button, compatibility modal, and orientation modal for mobile.
+* [embedded](https://aframe.io/docs/1.4.0/components/embedded.html) component removes fullscreen CSS styles from A-Frame’s `<canvas>` element, making it easier to embed within the layout of an existing webpage. Embedding removes the default fixed positioning from the canvas and makes the Enter VR button smaller.
+* The [renderer](https://aframe.io/docs/1.4.0/components/renderer.html) system configures a scene’s `THREE.WebGLRenderer` instance. 
+  * [logarithmicDepthBuffer](https://aframe.io/docs/1.4.0/components/renderer.html#logarithmicdepthbuffer) provides better sorting and rendering in scenes containing very large differences of scale and distance
+  * [precision](https://aframe.io/docs/1.4.0/components/renderer.html#precision) attribute sets precision in fragment shaders. Main use is to address issues in older hardware / drivers. Set to `medium` as a workaround. It will improve performance, in mobile in particular but be aware that might cause visual artifacts in shaders / textures.
+
+#### Load the NFT Marker
+
+Point the url to the path containing the Image Descriptors you generated and downloaded before: `../assets/dino-image/dino-image-tracking`. Those files will have a common name. 
+
+```js
+<a-nft
+  type="nft"
+  url="./assets/dino-image/dino-image-tracking"
+  smooth="true"
+  smoothCount="10"
+  smoothTolerance=".01"
+  smoothThreshold="5"
+></a-nft>
+```
+It is suggested to use `smooth`, `smoothCount` and `smoothTolerance` because of weak stabilization of content in Image Tracking. 
+
+#### Load the 3D Model
+
+Define the content to display the augmented reality content when you hover over the tracking image.
+
+```js
+  <a-entity
+    gltf-model="./assets/animated-cube/AnimatedCube.gltf"
+    scale="5 5 5"
+    position="50 150 0"
+  >
+  </a-entity>
+```
+
+You can replace the model above with any other assets: 2D videos, images, audio files. Any A-Frame `a-entity` is a valid child of the `a-nft` anchor.
+
+#### Camera
+
+The [camera](https://aframe.io/docs/1.4.0/components/camera.html) component defines from which perspective the user views the scene.
+
+```js
+<a-entity camera></a-entity>
+```
+
+Now the user can visit the website. It will create the AR experience and present the user with the asset loading screen. Once it is completed, point to the image, and you will be presented with the AR content specified in the code block.
 
 
+### Location Based Tracking
+
+It can be used for indoor (but with low precision) and outdoor geopositioning of AR content. You as a developer can specify places fo interest represented by real-world coordinates on which the AR content will appear.
+
+List of NFT Generators:
+* [NFT Marker Creator](https://carnaux.github.io/NFT-Marker-Creator/#/), Web version
+* [NFT Marker Creator](https://github.com/Carnaux/NFT-Marker-Creator), NodeJS version
+
+### Marker Based Tracking
+
+Markers are a sort of simplified qr-codes. AR.js defines specific 3D scenes for specific markers, so when the camera recognizes a marker, the web-app shows the 3D model on top of it. Marker based tracking requires barcodes, patterns or actual QR codes to activate the experience.
+
+List of Marker Generators:
+* [Custom Marker Generator](https://jeromeetienne.github.io/AR.js/three.js/examples/marker-training/examples/generator.html)
+* [AR Marker Generator](https://au.gmented.com/app/marker/marker.php)
+* [Pattern Markers](https://github.com/artoolkit/artoolkit5/tree/master/doc/patterns)
+* [QR Code Generator](https://www.qrcode-monkey.com/)
+
+Resource: [Ten Tips to Enhance Your ARjs application](https://medium.com/chialab-open-source/10-tips-to-enhance-your-ar-js-app-8b44c6faffca), Nicolò Carpignoli, Medium
 
 ### The End.
