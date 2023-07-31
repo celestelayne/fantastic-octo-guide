@@ -381,8 +381,8 @@ Resource: [Creating Good Image Markers](https://github.com/Carnaux/NFT-Marker-Cr
 
 You can add any custom loader that will be removed when image descriptors are loaded, just use the `.arjs-loader` CSS class on it.
 
-```js
-  // minimal loader shown until image descriptors are loaded ... loading may take a while according to the device computational power
+```html
+  <!-- minimal loader shown until image descriptors are loaded ... loading may take a while according to the device computational power -->
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
@@ -444,7 +444,7 @@ python3 -m http.server 3000
 
 Point the url to the path containing the Image Descriptors you generated and downloaded before: `../assets/dino-image/dino-image-tracking`. Those files will have a common name. 
 
-```js
+```html
 <a-nft
   type="nft"
   url="./assets/dino-image/dino-image-tracking"
@@ -456,11 +456,15 @@ Point the url to the path containing the Image Descriptors you generated and dow
 ```
 It is suggested to use `smooth`, `smoothCount` and `smoothTolerance` because of weak stabilization of content in Image Tracking. 
 
+List of NFT Generators:
+* [NFT Marker Creator](https://carnaux.github.io/NFT-Marker-Creator/#/), Web version
+* [NFT Marker Creator](https://github.com/Carnaux/NFT-Marker-Creator), NodeJS version
+
 #### Load the 3D Model
 
 Define the content to display the augmented reality content when you hover over the tracking image.
 
-```js
+```html
   <a-entity
     gltf-model="./assets/animated-cube/AnimatedCube.gltf"
     scale="5 5 5"
@@ -475,20 +479,67 @@ You can replace the model above with any other assets: 2D videos, images, audio 
 
 The [camera](https://aframe.io/docs/1.4.0/components/camera.html) component defines from which perspective the user views the scene.
 
-```js
+```html
 <a-entity camera></a-entity>
 ```
 
 Now the user can visit the website. It will create the AR experience and present the user with the asset loading screen. Once it is completed, point to the image, and you will be presented with the AR content specified in the code block.
 
-
 ### Location Based Tracking
 
-It can be used for indoor (but with low precision) and outdoor geopositioning of AR content. You as a developer can specify places fo interest represented by real-world coordinates on which the AR content will appear.
+Location-based tracking uses real-world coordinates to place AR content in context. It can be used for indoor (but with low precision) and outdoor geopositioning of AR content. WHen using it outdoors, users can move freely (with better precision) and content associated with their location will be scaled and placed accordingly (e.g: content will render bigger / smaller based on distance to the user).
 
-List of NFT Generators:
-* [NFT Marker Creator](https://carnaux.github.io/NFT-Marker-Creator/#/), Web version
-* [NFT Marker Creator](https://github.com/Carnaux/NFT-Marker-Creator), NodeJS version
+You as a developer can specify places fo interest represented by real-world coordinates on which the AR content will appear. With locatiopn-based tracking you can build experiences like cities and museum tours, restaurant guides, treasure hunts, biology or history learning games or place virtual art on any real world location.
+
+#### Import the Library
+
+```js
+    // aframe
+    <script type='text/javascript' src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    // Pure Three.js code that the A-Frame components use for location-based AR 
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    // AR.js A-Frame components 
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+```
+
+#### Scene Attributes
+
+```html
+<body>
+    <a-scene 
+      vr-mode-ui="enabled: false"
+      renderer="antialias: true; alpha: true;"
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false; videoTexture: true;">
+    </a-scene>
+</body>
+```
+
+* The `videoTexture` attribute is set to true. This is vital in an outdoor location-based AR app as it allows distant augmented content - such at the peaks we are going to eventually visualise - to be seen. (It does this by using a three.js texture for the camera feed which can be easily combined with our augmented content).
+
+#### Load Model
+
+The following example shows how to place text on a fixed position in the real world.. Make sure you replace your `current latitude` and `current longitude` with values close to your actual position.
+
+```html
+<a-entity 
+  material='color: red' 
+  geometry='primitive: box' 
+  gps-new-entity-place="latitude: 40.7788305; longitude: -73.9451072" 
+  scale="10 10 10">
+</a-entity>
+```
+If you are not seeing the cube, try to scale it up or choose a closer location. Replace the cube with any content you like, you can display 3D models, videos, images: Any `<a-entity>` will be tracked as expected.
+
+#### Camera
+
+The `gps-new-camera` component which automatically converts latitudes and longitudes into 3D world coordinates, allowing us to use latitude and longitude, rather than world coordinates, when adding places.
+
+```html
+<a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
+```
+
+Now the user can visit the website. It will create the AR experience and present the user with the asset loading screen. Once it is completed, point to the image, and you will be presented with the AR content specified in the code block.
 
 ### Marker Based Tracking
 
