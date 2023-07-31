@@ -12,4 +12,5 @@ Students will construct prototype workflows using several computational media (a
 
 * [Hello Cube](https://celestelayne.github.io/fantastic-octo-guide/03-virtual-augmented-reality/hello-cube-vr-app/)
 * [Image Based Tracking AR](https://celestelayne.github.io/fantastic-octo-guide/03-virtual-augmented-reality/image-based-ar-starter/)
-* [Location Based Tracking AR]()
+* [Location Based Tracking AR](https://celestelayne.github.io/fantastic-octo-guide/03-virtual-augmented-reality/location-based-ar-starter/)
+* [Marker Based Tracking AR](https://celestelayne.github.io/fantastic-octo-guide/03-virtual-augmented-reality/marker-based-ar-starter/)
