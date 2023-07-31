@@ -1,0 +1,23 @@
+body {
+    margin : 0px; 
+    overflow: hidden;
+}
+
+
+button {
+    width: 40%;
+    height: 50px;
+  }
+  
+  .flat {
+    margin: 0 10px;
+    border-radius: 25px;
+    font-size: 25px;
+    border: 0;
+    background: rgb(208, 65, 57);
+    color: #fff;
+  }
+  
+  .flat:hover {
+    background: #851c17;
+  }
