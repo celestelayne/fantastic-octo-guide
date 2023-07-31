@@ -2,6 +2,8 @@ console.log('this works');
 
 const btn = document.querySelector('button');
 const result = document.querySelector('#result');
+// const gps_camera = document.querySelector("[gps-new-camera]");
+const ar_scene = document.querySelector("a-scene")
 
 // callback function
 const getGPSLocation = event => {
@@ -19,7 +21,22 @@ const getGPSLocation = event => {
 const onSuccess = position => {
     console.log(position)
     const { latitude, longitude } = position.coords
-    result.textContent = `${latitude} , ${longitude}`
+
+    // create a box
+    const entity = document.createElement("a-box");
+    entity.setAttribute("scale", {
+        x: 10,
+        y: 10, 
+        z: 10
+    })
+    entity.setAttribute("material", { color: "red"})
+    entity.setAttribute("gps-new-entity-place", {
+        latitude: latitude + 0.001,
+        longitude: longitude
+    })
+    // result.textContent = `${latitude} , ${longitude}`
+
+    ar_scene.appendChild(entity);
 }
 
 // handle success
