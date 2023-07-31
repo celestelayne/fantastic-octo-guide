@@ -9,10 +9,7 @@
   <script type="text/javascript" src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body style='margin : 0px; overflow: hidden;'>
-  <div class="arjs-loader">
-    <div>Loading, please wait...</div>
-  </div>
+<body>
   <a-scene arjs embedded>
     <!-- create your content here. just a box for now -->
     <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>
@@ -20,6 +17,6 @@
     <a-marker-camera preset='hiro'></a-marker-camera>
   </a-scene>
 
-  <script src="app.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
