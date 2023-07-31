@@ -519,7 +519,7 @@ You as a developer can specify places fo interest represented by real-world coor
 
 #### Load Model
 
-The following example shows how to place text on a fixed position in the real world.. Make sure you replace your `current latitude` and `current longitude` with values close to your actual position.
+The following example shows how to place a cube on a fixed position in the real world. Make sure you replace your `current latitude` and `current longitude` with values close to your actual position.
 
 ```html
 <a-entity 
@@ -544,6 +544,56 @@ Now the user can visit the website. It will create the AR experience and present
 ### Marker Based Tracking
 
 Markers are a sort of simplified qr-codes. AR.js defines specific 3D scenes for specific markers, so when the camera recognizes a marker, the web-app shows the 3D model on top of it. Marker based tracking requires barcodes, patterns or actual QR codes to activate the experience.
+
+#### Import the Library
+
+```js
+    // aframe
+    <script type='text/javascript' src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    // AR.js A-Frame components 
+    <script type="text/javascript" src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+```
+
+#### Scene Attributes
+
+Initialize [ar.js](https://ar-js-org.github.io/AR.js-Docs/) in `<a-scene>`.
+
+```html
+<body>
+    <a-scene embedded arjs>
+    
+    </a-scene>
+</body>
+```
+
+#### Camera
+
+Define the camera which will move according to the marker position. This element tells A-Frame that you wnat arjs to control the camera.
+
+```html
+<a-marker-camera preset='hiro'></a-marker-camera>
+```
+
+#### Load 3D Model
+
+You can load a model exactly as you would in A-Frame. To load a primitive shape like a cube or a sphere:
+
+```html
+<a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>
+```
+
+To load a GLTF model:
+
+```html
+<!-- define your gltf asset -->
+<a-assets>
+  <a-asset-item id="cube" src="./assets/animated-cube"></a-asset-item>
+</a-assets>
+<!-- use your gltf model -->
+<a-entity gltf-model="##cube"></a-entity>
+```
+
+In this scene, the camera is being moved by AR.js, and the origin of your scene is at the center of the marker. All the rest is normal A-Frame. So if you want to add new objects in the augmented reality, just add it near the <a-box>
 
 List of Marker Generators:
 * [Custom Marker Generator](https://jeromeetienne.github.io/AR.js/three.js/examples/marker-training/examples/generator.html)
